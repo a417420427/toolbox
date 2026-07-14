@@ -11,6 +11,7 @@ dependencies:
     sdk: flutter
   dio: any
   crypto: any
+  pointycastle: ^3.9.1
   image: any
   qr: any
 

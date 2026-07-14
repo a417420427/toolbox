@@ -42,6 +42,11 @@ import 'pages/formatters/sql_formatter_page.dart';
 import 'pages/formatters/yaml_json_page.dart';
 import 'pages/formatters/xml_formatter_page.dart';
 import 'pages/formatters/color_scheme_page.dart';
+import 'pages/tools/bmi_page.dart';
+import 'pages/formatters/markdown_page.dart';
+import 'pages/formatters/sort_page.dart';
+import 'pages/dev/url_parser_page.dart';
+import 'pages/crypto/aes_page.dart';
 
 /// 抑制 Flutter Web 已知的 viewInsets 断言错误
 /// 参考: https://github.com/flutter/flutter/issues?q=ViewInsets+cannot+be+negative
@@ -778,6 +783,11 @@ class ToolPageContainer extends StatelessWidget {
     if (id == 'holiday') return const HolidayPage();
     if (id == 'anniversary') return const AnniversaryPage();
     if (id == 'timezone') return const TimeZonePage();
+    if (id == 'bmi') return const BmiPage();
+    if (id == 'markdown_preview') return const MarkdownPage();
+    if (id == 'sort_tool') return const SortPage();
+    if (id == 'url_parser') return const UrlParserPage();
+    if (id == 'aes') return const AesPage();
     return const Center(child: Text('工具开发中...'));
   }
 }

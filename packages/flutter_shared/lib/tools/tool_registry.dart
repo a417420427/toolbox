@@ -268,6 +268,43 @@ class ToolRegistry {
       icon: Icons.qr_code,
       category: ToolCategory.tools,
     ),
+
+    // ── V2 新增工具 ──
+    const ToolDefinition(
+      id: 'bmi',
+      name: '健康指标',
+      description: 'BMI / 体脂率 / BMR 基础代谢',
+      icon: Icons.monitor_heart_outlined,
+      category: ToolCategory.tools,
+    ),
+    const ToolDefinition(
+      id: 'markdown_preview',
+      name: 'Markdown 预览',
+      description: '实时渲染 Markdown → HTML',
+      icon: Icons.description,
+      category: ToolCategory.formatters,
+    ),
+    const ToolDefinition(
+      id: 'sort_tool',
+      name: '排序 / 去重',
+      description: '文本行排序、去重、统计',
+      icon: Icons.sort,
+      category: ToolCategory.formatters,
+    ),
+    const ToolDefinition(
+      id: 'url_parser',
+      name: 'URL 解析器',
+      description: '协议 / 域名 / 查询参数解析',
+      icon: Icons.alt_route,
+      category: ToolCategory.dev,
+    ),
+    const ToolDefinition(
+      id: 'aes',
+      name: 'AES 加解密',
+      description: 'AES-256-CBC/ECB/CTR 加解密',
+      icon: Icons.enhanced_encryption,
+      category: ToolCategory.crypto,
+    ),
   ];
 
   static List<ToolDefinition> all() => List.unmodifiable(_all);

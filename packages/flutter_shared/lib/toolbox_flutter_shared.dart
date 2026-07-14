@@ -52,6 +52,13 @@ export 'tools/xml_formatter.dart';
 export 'tools/color_scheme_tool.dart';
 export 'tools/image_utils.dart';
 
+// 新增工具
+export 'tools/bmi_tool.dart';
+export 'tools/sort_tool.dart';
+export 'tools/url_parser_tool.dart';
+export 'tools/markdown_tool.dart';
+export 'tools/aes_tool.dart';
+
 export 'widgets/tool_card.dart';
 export 'widgets/monospace_text.dart';
 export 'widgets/copy_button.dart';
