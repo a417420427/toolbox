@@ -242,3 +242,31 @@ ThemeData(
   ),
 )
 ```
+
+### 实际实现文件
+
+| 设计概念 | 实现位置 |
+|---|---|
+| 色彩 Token（Brand/Neutral/Semantic） | `packages/flutter_shared/lib/theme/app_colors.dart` |
+| 字阶 Token / 字体栈 | `packages/flutter_shared/lib/theme/app_typography.dart` |
+| 间距 / 圆角 Token | `packages/flutter_shared/lib/theme/app_spacing.dart` |
+| Light/Dark ThemeData | `packages/flutter_shared/lib/theme/app_theme.dart` |
+| 工具卡片容器 | `packages/flutter_shared/lib/widgets/tool_card.dart` |
+| 结果面板 | `packages/flutter_shared/lib/widgets/result_panel.dart` |
+| 复制按钮 | `packages/flutter_shared/lib/widgets/copy_button.dart` |
+| 等宽文字 | `packages/flutter_shared/lib/widgets/monospace_text.dart` |
+
+### 自适应导航（实际实现）
+
+```dart
+// /Users/zlzk/Dev/personal/toolbox/apps/mobile/lib/main.dart
+LayoutBuilder(
+  builder: (context, constraints) {
+    if (constraints.maxWidth >= 640) {
+      return _buildWideLayout();   // NavigationRail + 200px 工具列表 + 内容区
+    } else {
+      return _buildNarrowLayout(); // NavigationBar + AppBar + 工具内容
+    }
+  },
+)
+```

@@ -13,6 +13,12 @@ import 'pages/crypto/jwt_page.dart';
 import 'pages/text/text_stats_page.dart';
 import 'pages/text/text_case_page.dart';
 import 'pages/text/regex_page.dart';
+// 日常工具
+import 'pages/tools/calculator_page.dart';
+import 'pages/tools/unit_converter_page.dart';
+import 'pages/tools/date_calc_page.dart';
+import 'pages/tools/countdown_page.dart';
+import 'pages/tools/random_selector_page.dart';
 import 'pages/dev/html_entity_page.dart';
 import 'pages/dev/unicode_page.dart';
 import 'pages/dev/cron_page.dart';
@@ -182,32 +188,35 @@ class _HomePageState extends State<HomePage> {
         itemBuilder: (context, index) {
           final tool = tools[index];
           final selected = tool.id == _selectedToolId;
-          return ListTile(
-            selected: selected,
-            selectedTileColor: AppColors.brand50,
-            leading: Icon(
-              tool.icon,
-              size: 20,
-              color: selected ? AppColors.brand500 : AppColors.neutral500,
-            ),
-            title: Text(
-              tool.name,
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
-                color: selected ? AppColors.brand700 : null,
+          return Material(
+            color: Colors.transparent,
+            child: ListTile(
+              selected: selected,
+              selectedTileColor: AppColors.brand50,
+              leading: Icon(
+                tool.icon,
+                size: 20,
+                color: selected ? AppColors.brand500 : AppColors.neutral500,
               ),
-            ),
-            subtitle: Text(
-              tool.description,
-              style: const TextStyle(fontSize: 11),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-            dense: true,
-            onTap: () => _onToolSelected(tool.id),
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.zero,
+              title: Text(
+                tool.name,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
+                  color: selected ? AppColors.brand700 : null,
+                ),
+              ),
+              subtitle: Text(
+                tool.description,
+                style: const TextStyle(fontSize: 11),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+              dense: true,
+              onTap: () => _onToolSelected(tool.id),
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.zero,
+              ),
             ),
           );
         },
@@ -242,18 +251,17 @@ class ToolPageContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<String>(
-      future: Future.value(toolId),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        return _buildToolPage(snapshot.data!);
-      },
-    );
+    return _buildToolPage(toolId);
   }
 
   Widget _buildToolPage(String id) {
+    // 日常工具
+    if (id == 'calculator') return const CalculatorPage();
+    if (id == 'unit_converter') return const UnitConverterPage();
+    if (id == 'date_calc') return const DateCalcPage();
+    if (id == 'countdown') return const CountdownPage();
+    if (id == 'random_selector') return const RandomSelectorPage();
+    if (id == 'text_stats') return const TextStatsToolPage();
     // 格式化类
     if (id == 'json') return const JsonToolPage();
     if (id == 'base64') return const Base64ToolPage();
@@ -264,11 +272,9 @@ class ToolPageContainer extends StatelessWidget {
     if (id == 'uuid') return const UuidToolPage();
     if (id == 'hash') return const HashToolPage();
     if (id == 'jwt') return const JwtToolPage();
-    // 文本
-    if (id == 'text_stats') return const TextStatsToolPage();
+    // 开发者工具
     if (id == 'text_case') return const TextCaseToolPage();
     if (id == 'regex') return const RegexToolPage();
-    // 开发者
     if (id == 'html_entity') return const HtmlEntityToolPage();
     if (id == 'unicode') return const UnicodeToolPage();
     if (id == 'cron') return const CronToolPage();

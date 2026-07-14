@@ -24,6 +24,13 @@ export 'tools/text_stats_data.dart';
 export 'tools/text_case_tool.dart';
 export 'tools/regex_tool.dart';
 export 'tools/regex_result.dart';
+
+// 日常工具
+export 'tools/calculator_tool.dart';
+export 'tools/unit_converter_tool.dart';
+export 'tools/date_calc_tool.dart';
+export 'tools/countdown_tool.dart';
+export 'tools/random_selector_tool.dart';
 export 'tools/html_entity_tool.dart';
 export 'tools/unicode_tool.dart';
 export 'tools/cron_tool.dart';

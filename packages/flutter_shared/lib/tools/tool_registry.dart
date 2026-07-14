@@ -7,6 +7,50 @@ class ToolRegistry {
   ToolRegistry._();
 
   static final List<ToolDefinition> _all = [
+    // ── 日常工具 ──
+    const ToolDefinition(
+      id: 'calculator',
+      name: '计算器',
+      description: '日常计算 / 科学计算',
+      icon: Icons.calculate_outlined,
+      category: ToolCategory.tools,
+    ),
+    const ToolDefinition(
+      id: 'unit_converter',
+      name: '单位换算',
+      description: '长度 / 重量 / 温度 / 面积 / 体积 / 数据存储',
+      icon: Icons.straighten,
+      category: ToolCategory.tools,
+    ),
+    const ToolDefinition(
+      id: 'date_calc',
+      name: '日期计算',
+      description: '日期差 / 加减天数 / 工作日计算',
+      icon: Icons.date_range,
+      category: ToolCategory.tools,
+    ),
+    const ToolDefinition(
+      id: 'countdown',
+      name: '倒计时',
+      description: '设定目标日期，显示剩余时间',
+      icon: Icons.timer_outlined,
+      category: ToolCategory.tools,
+    ),
+    const ToolDefinition(
+      id: 'random_selector',
+      name: '随机选择器',
+      description: '抛硬币 / 抽签 / 列表随机选',
+      icon: Icons.shuffle,
+      category: ToolCategory.tools,
+    ),
+    const ToolDefinition(
+      id: 'text_stats',
+      name: '字数统计',
+      description: '字符 / 单词 / 行数 实时统计',
+      icon: Icons.bar_chart,
+      category: ToolCategory.tools,
+    ),
+
     // ── 格式化 & 转换 ──
     const ToolDefinition(
       id: 'json',
@@ -67,30 +111,14 @@ class ToolRegistry {
       category: ToolCategory.crypto,
     ),
 
-    // ── 文本处理 ──
-    const ToolDefinition(
-      id: 'text_stats',
-      name: '文本统计',
-      description: '字符 / 单词 / 行数统计',
-      icon: Icons.bar_chart,
-      category: ToolCategory.text,
-    ),
-    const ToolDefinition(
-      id: 'text_case',
-      name: '文字格式互转',
-      description: '大小写 / 驼峰 / 蛇形 / 中划线',
-      icon: Icons.text_format,
-      category: ToolCategory.text,
-    ),
+    // ── 开发者工具 ──
     const ToolDefinition(
       id: 'regex',
       name: '正则测试器',
       description: '实时匹配高亮 / Flags 开关',
       icon: Icons.manage_search,
-      category: ToolCategory.text,
+      category: ToolCategory.dev,
     ),
-
-    // ── 开发者工具 ──
     const ToolDefinition(
       id: 'html_entity',
       name: 'HTML 实体编解码',
@@ -110,6 +138,13 @@ class ToolRegistry {
       name: 'Cron 解析器',
       description: 'Cron → 可读描述 / 执行时间预览',
       icon: Icons.timer,
+      category: ToolCategory.dev,
+    ),
+    const ToolDefinition(
+      id: 'text_case',
+      name: '文字格式互转',
+      description: '大小写 / 驼峰 / 蛇形 / 中划线',
+      icon: Icons.text_format,
       category: ToolCategory.dev,
     ),
   ];
