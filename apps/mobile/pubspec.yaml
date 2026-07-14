@@ -34,7 +34,11 @@ dependencies:
   toolbox_flutter_shared:
     path: ../../packages/flutter_shared
 
+  provider: ^6.0.0
+
   cupertino_icons: ^1.0.8
+  image: ^4.9.1
+  qr: ^4.0.0
 
 dev_dependencies:
   flutter_test:

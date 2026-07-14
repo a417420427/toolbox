@@ -16,17 +16,32 @@ model User {
   updatedAt DateTime @updatedAt
 
   favorites ToolFavorite[]
+  folders   FavoriteFolder[]
 }
 
 model ToolFavorite {
   id        String   @id @default(cuid())
   userId    String
   toolId    String
+  folder    String   @default("") // 空字符串 = 未分类
   sortOrder Int      @default(0)
   createdAt DateTime @default(now())
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, toolId])
+  @@index([userId])
+}
+
+model FavoriteFolder {
+  id        String   @id @default(cuid())
+  userId    String
+  name      String
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, name])
   @@index([userId])
 }

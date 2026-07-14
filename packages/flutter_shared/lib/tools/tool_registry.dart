@@ -53,6 +53,27 @@ class ToolRegistry {
 
     // ── 格式化 & 转换 ──
     const ToolDefinition(
+      id: 'sql_formatter',
+      name: 'SQL 格式化',
+      description: 'SQL 美化 / 压缩',
+      icon: Icons.storage,
+      category: ToolCategory.formatters,
+    ),
+    const ToolDefinition(
+      id: 'xml_formatter',
+      name: 'XML 格式化',
+      description: 'XML 美化 / 压缩',
+      icon: Icons.code,
+      category: ToolCategory.formatters,
+    ),
+    const ToolDefinition(
+      id: 'yaml_json',
+      name: 'YAML ↔ JSON',
+      description: 'YAML 与 JSON 互转',
+      icon: Icons.swap_horiz,
+      category: ToolCategory.formatters,
+    ),
+    const ToolDefinition(
       id: 'json',
       name: 'JSON 工具',
       description: '格式化 / 压缩 / 校验 JSON',
@@ -87,8 +108,29 @@ class ToolRegistry {
       icon: Icons.palette,
       category: ToolCategory.formatters,
     ),
+    const ToolDefinition(
+      id: 'color_scheme',
+      name: '配色方案',
+      description: '调色板 / 互补色 / 配色推荐',
+      icon: Icons.color_lens,
+      category: ToolCategory.formatters,
+    ),
 
     // ── 编码 & 加密 ──
+    const ToolDefinition(
+      id: 'number_base',
+      name: '进制转换',
+      description: '2 / 8 / 10 / 16 进制互转',
+      icon: Icons.numbers,
+      category: ToolCategory.crypto,
+    ),
+    const ToolDefinition(
+      id: 'password',
+      name: '密码生成器',
+      description: '可配置字符集的强密码',
+      icon: Icons.password,
+      category: ToolCategory.crypto,
+    ),
     const ToolDefinition(
       id: 'uuid',
       name: 'UUID 生成器',
@@ -112,6 +154,20 @@ class ToolRegistry {
     ),
 
     // ── 开发者工具 ──
+    const ToolDefinition(
+      id: 'ip_tool',
+      name: 'IP 工具',
+      description: 'CIDR / 子网掩码 / 地址计算',
+      icon: Icons.language,
+      category: ToolCategory.dev,
+    ),
+    const ToolDefinition(
+      id: 'diff',
+      name: '文本对比',
+      description: '两段文本差异高亮对比',
+      icon: Icons.compare_arrows,
+      category: ToolCategory.dev,
+    ),
     const ToolDefinition(
       id: 'regex',
       name: '正则测试器',
@@ -146,6 +202,71 @@ class ToolRegistry {
       description: '大小写 / 驼峰 / 蛇形 / 中划线',
       icon: Icons.text_format,
       category: ToolCategory.dev,
+    ),
+
+    // ── 新增日常工具 ──
+    const ToolDefinition(
+      id: 'pomodoro',
+      name: '番茄钟',
+      description: '25分钟专注 / 5分钟休息',
+      icon: Icons.timer_outlined,
+      category: ToolCategory.tools,
+    ),
+    const ToolDefinition(
+      id: 'stopwatch',
+      name: '秒表',
+      description: '计时 / 分段计时 / 计圈',
+      icon: Icons.timer,
+      category: ToolCategory.tools,
+    ),
+    const ToolDefinition(
+      id: 'mortgage',
+      name: '房贷计算器',
+      description: '等额本息 / 等额本金 / 利息计算',
+      icon: Icons.account_balance,
+      category: ToolCategory.tools,
+    ),
+    const ToolDefinition(
+      id: 'holiday',
+      name: '节假日',
+      description: '法定假日 / 倒计时 / 节日查询',
+      icon: Icons.event,
+      category: ToolCategory.tools,
+    ),
+    const ToolDefinition(
+      id: 'anniversary',
+      name: '纪念日',
+      description: '恋爱 / 生日 / 自定义倒数日',
+      icon: Icons.favorite,
+      category: ToolCategory.tools,
+    ),
+    const ToolDefinition(
+      id: 'timezone',
+      name: '世界时区',
+      description: '全球时区 / 实时时间 / 时差对比',
+      icon: Icons.public,
+      category: ToolCategory.tools,
+    ),
+    const ToolDefinition(
+      id: 'emoji',
+      name: 'Emoji 搜索',
+      description: '搜索并复制 Emoji',
+      icon: Icons.emoji_emotions,
+      category: ToolCategory.tools,
+    ),
+    const ToolDefinition(
+      id: 'investment',
+      name: '投资计算',
+      description: '复利 / 定投 / 收益计算',
+      icon: Icons.trending_up,
+      category: ToolCategory.tools,
+    ),
+    const ToolDefinition(
+      id: 'qr_code',
+      name: '二维码生成',
+      description: '文本 / 链接生成二维码',
+      icon: Icons.qr_code,
+      category: ToolCategory.tools,
     ),
   ];
 
