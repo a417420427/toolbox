@@ -11,6 +11,8 @@ dependencies:
     sdk: flutter
   dio: any
   crypto: any
+  image: any
+  qr: any
 
 dev_dependencies:
   flutter_test:

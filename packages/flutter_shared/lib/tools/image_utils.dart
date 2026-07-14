@@ -11,7 +11,7 @@ class ImageUtils {
 
   /// 图片分辨率归类
   static String resolutionLabel(int width, int height) {
-    final mp = (width * height) / 1_000_000;
+    final mp = (width * height) / 1000000;
     if (mp < 0.3) return '低清';
     if (mp < 2) return '普清';
     if (mp < 8) return '高清';
