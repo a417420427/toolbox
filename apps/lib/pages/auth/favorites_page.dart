@@ -75,7 +75,6 @@ class _FolderToolbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final realFolders = auth.folders.where((f) => f.name != '未分类').toList();
-    if (realFolders.isEmpty) return const SizedBox.shrink();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

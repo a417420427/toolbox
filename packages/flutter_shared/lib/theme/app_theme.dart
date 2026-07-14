@@ -123,6 +123,7 @@ class AppTheme {
         ),
         side: const BorderSide(color: AppColors.neutral200),
       ),
+
     );
   }
 
@@ -229,6 +230,7 @@ class AppTheme {
         thickness: 1,
         space: 1,
       ),
+
     );
   }
 }

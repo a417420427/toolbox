@@ -59,7 +59,7 @@ void _suppressViewInsetsAssertion() {
   };
 }
 
-void main() {
+void main() async {
   _suppressViewInsetsAssertion();
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([
@@ -84,6 +84,7 @@ class ToolboxApp extends StatelessWidget {
         darkTheme: AppTheme.dark(),
         themeMode: ThemeMode.system,
         home: const HomePage(),
+
       ),
     );
   }
@@ -107,6 +108,11 @@ class _HomePageState extends State<HomePage> {
   // Dashboard 分类折叠状态
   final Set<ToolCategory> _collapsedCategories = {};
 
+  @override
+  void initState() {
+    super.initState();
+  }
+
   bool get _isOnDashboard => _selectedToolId == null;
 
   Map<ToolCategory, List<ToolDefinition>> get _groupedTools {
@@ -120,6 +126,7 @@ class _HomePageState extends State<HomePage> {
   void _onToolSelected(String toolId) {
     setState(() => _selectedToolId = toolId);
   }
+
 
   void _goBackToDashboard() {
     setState(() => _selectedToolId = null);
@@ -363,9 +370,15 @@ class _HomePageState extends State<HomePage> {
         if (_isOnDashboard) return AppBar(title: const Text('工具箱'));
         return AppBar(
           title: Text(ToolRegistry.byId(_selectedToolId!)?.name ?? '工具箱'),
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: _goBackToDashboard,
+          leading: InkWell(
+            onTap: _goBackToDashboard,
+            borderRadius: BorderRadius.circular(20),
+            child: Container(
+              width: 40,
+              height: 40,
+              alignment: Alignment.center,
+              child: const Icon(Icons.arrow_back),
+            ),
           ),
           actions: [
             Padding(
@@ -631,6 +644,7 @@ class _ToolGridItem extends StatelessWidget {
   final bool favorited;
   final VoidCallback onTap;
   final VoidCallback? onFavorite;
+  final VoidCallback? onAddToHomeScreen;
   final double itemWidth;
 
   const _ToolGridItem({
@@ -639,6 +653,7 @@ class _ToolGridItem extends StatelessWidget {
     required this.favorited,
     required this.onTap,
     this.onFavorite,
+    this.onAddToHomeScreen,
   });
 
   @override
@@ -662,6 +677,7 @@ class _ToolGridItem extends StatelessWidget {
 
     return GestureDetector(
       onTap: onTap,
+      onLongPress: () => _showContextMenu(context),
       child: Padding(
         padding: const EdgeInsets.all(2),
         child: Container(
@@ -728,6 +744,53 @@ class _ToolGridItem extends StatelessWidget {
                 ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  void _showContextMenu(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (ctx) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              child: Text(
+                tool.name,
+                style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+              ),
+            ),
+            const Divider(height: 1),
+            if (onAddToHomeScreen != null)
+              ListTile(
+                leading: const Icon(Icons.widgets_outlined, color: AppColors.brand500),
+                title: const Text('添加到桌面小组件'),
+                subtitle: const Text('长按桌面添加后快速打开此工具'),
+                onTap: () {
+                  Navigator.of(ctx).pop();
+                  onAddToHomeScreen!();
+                },
+              ),
+            if (onFavorite != null)
+              ListTile(
+                leading: Icon(
+                  favorited ? Icons.star : Icons.star_border,
+                  color: favorited ? AppColors.warning : AppColors.neutral600,
+                ),
+                title: Text(favorited ? '取消收藏' : '收藏'),
+                onTap: () {
+                  Navigator.of(ctx).pop();
+                  onFavorite!();
+                },
+              ),
+            const SizedBox(height: 8),
+          ],
         ),
       ),
     );
