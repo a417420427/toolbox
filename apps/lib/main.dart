@@ -640,84 +640,89 @@ class _ToolGridItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     // 根据网格项宽度自适应尺寸
-    double iconSize, nameSize, descSize, starSize;
+    double iconSize, nameSize, descSize;
     if (itemWidth > 120) {
       iconSize = 32;
       nameSize = 13;
       descSize = 11;
-      starSize = 16;
     } else if (itemWidth > 90) {
       iconSize = 28;
       nameSize = 12;
       descSize = 10;
-      starSize = 15;
     } else {
       iconSize = 24;
       nameSize = 11;
       descSize = 9;
-      starSize = 14;
     }
 
     return GestureDetector(
       onTap: onTap,
-      child: Container(
-        decoration: BoxDecoration(
-          color: isDark ? AppColors.neutralDark100 : Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: isDark ? AppColors.neutralDark200 : AppColors.neutral200,
-          ),
-        ),
-        child: Stack(
-          children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(tool.icon, size: iconSize, color: AppColors.brand500),
-                const SizedBox(height: 8),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4),
-                  child: Text(
-                    tool.name,
-                    textAlign: TextAlign.center,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: nameSize,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4),
-                  child: Text(
-                    tool.description,
-                    textAlign: TextAlign.center,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: descSize,
-                      color: AppColors.neutral400,
-                      height: 1.3,
-                    ),
-                  ),
-                ),
-              ],
+      child: Padding(
+        padding: const EdgeInsets.all(2),
+        child: Container(
+          decoration: BoxDecoration(
+            color: isDark ? AppColors.neutralDark100 : Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: isDark ? AppColors.neutralDark200 : AppColors.neutral200,
             ),
-            if (onFavorite != null)
-              Positioned(
-                top: 4,
-                right: 4,
-                child: GestureDetector(
-                  onTap: onFavorite,
-                  child: Icon(
-                    favorited ? Icons.star : Icons.star_border,
-                    size: starSize,
-                    color: favorited ? AppColors.warning : AppColors.neutral300,
-                  ),
+          ),
+          child: Stack(
+            children: [
+              Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Icon(tool.icon, size: iconSize, color: AppColors.brand500),
+                    const SizedBox(height: 6),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 6),
+                      child: Text(
+                        tool.name,
+                        textAlign: TextAlign.center,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: nameSize,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                    if (tool.description.isNotEmpty)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 6),
+                        child: Text(
+                          tool.description,
+                          textAlign: TextAlign.center,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: descSize,
+                            color: AppColors.neutral400,
+                            height: 1.3,
+                          ),
+                        ),
+                      ),
+                  ],
                 ),
               ),
-          ],
+              if (onFavorite != null)
+                Positioned(
+                  top: 4,
+                  right: 4,
+                  child: GestureDetector(
+                    onTap: onFavorite,
+                    child: Icon(
+                      favorited ? Icons.star : Icons.star_border,
+                      size: itemWidth > 100 ? 16 : 14,
+                      color: favorited ? AppColors.warning : AppColors.neutral300,
+                    ),
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
     );
