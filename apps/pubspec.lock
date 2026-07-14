@@ -299,7 +299,7 @@ packages:
   toolbox_flutter_shared:
     dependency: "direct main"
     description:
-      path: "../../packages/flutter_shared"
+      path: "../packages/flutter_shared"
       relative: true
     source: path
     version: "0.0.1"

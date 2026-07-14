@@ -280,34 +280,56 @@ class _HomePageState extends State<HomePage> {
       ),
   ];
 
+  /// 根据屏幕宽度计算缩放系数（仅在宽屏下应用）
+  double _responsiveScale(double maxWidth) {
+    return (maxWidth / 400).clamp(0.85, 1.3);
+  }
+
+  /// 宽屏下内容居中 + 最大宽度限制
+  Widget _wrappedBody(double maxWidth) {
+    const contentMaxWidth = 1200.0;
+    return Align(
+      alignment: Alignment.topCenter,
+      child: SizedBox(
+        width: contentMaxWidth,
+        child: _buildBody(),
+      ),
+    );
+  }
+
   // ══════════ 宽屏 ══════════
 
   Widget _buildWideLayout(int tabCount) {
-    return Scaffold(
-      body: SafeArea(
-        child: Row(
-          children: [
-            NavigationRail(
-              selectedIndex: _navIndex,
-              onDestinationSelected: _onNavChanged,
-              labelType: NavigationRailLabelType.all,
-              backgroundColor: Theme.of(context).colorScheme.surface,
-              indicatorColor: AppColors.brand100,
-              leading: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                child: Icon(
-                  Icons.build_outlined,
-                  color: AppColors.brand500,
-                  size: 28,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final maxWidth = constraints.maxWidth;
+        return Scaffold(
+          body: SafeArea(
+            child: Row(
+              children: [
+                NavigationRail(
+                  selectedIndex: _navIndex,
+                  onDestinationSelected: _onNavChanged,
+                  labelType: NavigationRailLabelType.all,
+                  backgroundColor: Theme.of(context).colorScheme.surface,
+                  indicatorColor: AppColors.brand100,
+                  leading: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    child: Icon(
+                      Icons.build_outlined,
+                      color: AppColors.brand500,
+                      size: 28,
+                    ),
+                  ),
+                  destinations: _railDestinations,
                 ),
-              ),
-              destinations: _railDestinations,
+                const VerticalDivider(width: 1),
+                Expanded(child: _wrappedBody(maxWidth)),
+              ],
             ),
-            const VerticalDivider(width: 1),
-            Expanded(child: _buildBody()),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 
@@ -379,14 +401,20 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildDashboard() {
     final auth = context.watch<AuthProvider>();
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: _groupedTools.entries.map((entry) {
-          return _buildCategorySection(entry.key, entry.value, auth);
-        }).toList(),
-      ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final scale = _responsiveScale(constraints.maxWidth);
+        final padding = (16 * scale).clamp(12.0, 24.0);
+        return SingleChildScrollView(
+          padding: EdgeInsets.all(padding),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: _groupedTools.entries.map((entry) {
+              return _buildCategorySection(entry.key, entry.value, auth);
+            }).toList(),
+          ),
+        );
+      },
     );
   }
 
@@ -440,20 +468,30 @@ class _HomePageState extends State<HomePage> {
           if (!collapsed)
             LayoutBuilder(
               builder: (context, constraints) {
-                final crossAxisCount = constraints.maxWidth > 600 ? 4 : 3;
+                final crossAxisCount = constraints.maxWidth > 900
+                    ? 6
+                    : constraints.maxWidth > 600
+                        ? 4
+                        : 3;
+                final spacing =
+                    (8.0 * _responsiveScale(constraints.maxWidth)).clamp(6.0, 14.0);
+                final itemWidth =
+                    (constraints.maxWidth - spacing * (crossAxisCount - 1)) /
+                        crossAxisCount;
                 return GridView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: crossAxisCount,
-                    mainAxisSpacing: 8,
-                    crossAxisSpacing: 8,
-                    childAspectRatio: 1.1,
+                    mainAxisSpacing: spacing,
+                    crossAxisSpacing: spacing,
+                    childAspectRatio: 1.0,
                   ),
                   itemCount: tools.length,
                   itemBuilder: (context, index) {
                     final tool = tools[index];
                     return _ToolGridItem(
+                      itemWidth: itemWidth,
                       tool: tool,
                       favorited: auth.isFavorite(tool.id),
                       onTap: () => _onToolSelected(tool.id),
@@ -588,8 +626,10 @@ class _ToolGridItem extends StatelessWidget {
   final bool favorited;
   final VoidCallback onTap;
   final VoidCallback? onFavorite;
+  final double itemWidth;
 
   const _ToolGridItem({
+    required this.itemWidth,
     required this.tool,
     required this.favorited,
     required this.onTap,
@@ -599,6 +639,25 @@ class _ToolGridItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    // 根据网格项宽度自适应尺寸
+    double iconSize, nameSize, descSize, starSize;
+    if (itemWidth > 120) {
+      iconSize = 32;
+      nameSize = 13;
+      descSize = 11;
+      starSize = 16;
+    } else if (itemWidth > 90) {
+      iconSize = 28;
+      nameSize = 12;
+      descSize = 10;
+      starSize = 15;
+    } else {
+      iconSize = 24;
+      nameSize = 11;
+      descSize = 9;
+      starSize = 14;
+    }
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -614,7 +673,7 @@ class _ToolGridItem extends StatelessWidget {
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(tool.icon, size: 28, color: AppColors.brand500),
+                Icon(tool.icon, size: iconSize, color: AppColors.brand500),
                 const SizedBox(height: 8),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 4),
@@ -623,8 +682,8 @@ class _ToolGridItem extends StatelessWidget {
                     textAlign: TextAlign.center,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      fontSize: 12,
+                    style: TextStyle(
+                      fontSize: nameSize,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -636,8 +695,8 @@ class _ToolGridItem extends StatelessWidget {
                     textAlign: TextAlign.center,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      fontSize: 10,
+                    style: TextStyle(
+                      fontSize: descSize,
                       color: AppColors.neutral400,
                       height: 1.3,
                     ),
@@ -653,7 +712,7 @@ class _ToolGridItem extends StatelessWidget {
                   onTap: onFavorite,
                   child: Icon(
                     favorited ? Icons.star : Icons.star_border,
-                    size: 16,
+                    size: starSize,
                     color: favorited ? AppColors.warning : AppColors.neutral300,
                   ),
                 ),

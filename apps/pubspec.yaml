@@ -32,7 +32,7 @@ dependencies:
     sdk: flutter
 
   toolbox_flutter_shared:
-    path: ../../packages/flutter_shared
+    path: ../packages/flutter_shared
 
   provider: ^6.0.0
 

@@ -6,7 +6,7 @@ class ApiClient {
   factory ApiClient() => _instance;
   ApiClient._();
 
-  static const String _baseUrl = 'http://localhost:3000/api';
+  static const String _baseUrl = 'https://ibnlus.com/tool/api';
 
   final Dio _dio = Dio(BaseOptions(
     baseUrl: _baseUrl,
