@@ -1,0 +1,12 @@
+{
+  "name": "@toolbox/server",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "start:dev": "nest start --watch",
+    "start": "node dist/main",
+    "build": "nest build",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:generate": "prisma generate"
+  }
+}

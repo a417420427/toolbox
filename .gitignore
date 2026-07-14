@@ -1,0 +1,27 @@
+node_modules/
+dist/
+build/
+.env
+.env.local
+*.log
+.DS_Store
+
+# Flutter
+apps/mobile/build/
+apps/mobile/.dart_tool/
+apps/mobile/.packages
+apps/mobile/.flutter-plugins
+apps/mobile/.flutter-plugins-dependencies
+apps/mobile/ios/Pods/
+apps/mobile/ios/.symlinks/
+apps/mobile/android/.gradle/
+apps/mobile/android/local.properties
+apps/mobile/android/app/build/
+
+# Flutter shared
+packages/flutter_shared/.dart_tool/
+packages/flutter_shared/build/
+
+# Prisma
+server/prisma/*.db
+server/prisma/*.db-journal

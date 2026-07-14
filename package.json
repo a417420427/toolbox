@@ -1,0 +1,17 @@
+{
+  "name": "toolbox",
+  "private": true,
+  "version": "0.0.0",
+  "description": "个人效率工具箱 — Web / Flutter / NestJS",
+  "scripts": {
+    "dev:web": "cd apps/web && pnpm dev",
+    "dev:server": "cd server && pnpm start:dev",
+    "build:web": "cd apps/web && pnpm build",
+    "build:server": "cd server && pnpm build",
+    "db:migrate": "cd server && pnpm prisma:migrate",
+    "docker:up": "cd docker && docker compose up -d"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
