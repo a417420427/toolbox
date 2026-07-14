@@ -1,17 +1,50 @@
-# toolbox_app
+# 工具箱
 
-A new Flutter project.
+个人效率工具箱 Flutter App
 
-## Getting Started
+## 目录结构
 
-This project is a starting point for a Flutter application.
+```
+toolbox/
+├── apps/               ← Flutter 主应用（运行入口）
+│   ├── lib/            ← 页面代码
+│   ├── web/            ← Web 配置
+│   ├── ios/            ← iOS 配置
+│   └── android/        ← Android 配置
+│
+├── packages/
+│   └── flutter_shared/ ← 共享包（主题、工具定义、API）
+│
+├── server/             ← Nest.js 后端
+│   ├── src/
+│   └── prisma/
+│
+├── ios_run.sh          ← iOS 模拟器启动脚本
+└── README.md
+```
 
-A few resources to get you started if this is your first Flutter project:
+## 开发
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+```bash
+# 应用目录
+cd apps
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+# Web
+flutter run -d chrome
+
+# iOS
+flutter run -d <设备 UUID>
+
+# macOS
+flutter run -d macos
+```
+
+## 后端
+
+```bash
+cd server
+pnpm install
+pnpm start:dev
+```
+
+生产部署地址：`https://ibnlus.com/tool/api`（PM2 管理）
