@@ -1,0 +1,69 @@
+// 主题变量 — 对齐 Flutter Design Tokens (DESIGN.md)
+// 转发到 variables.scss
+
+$color-brand50: #EFF6FF;
+$color-brand100: #DBEAFE;
+$color-brand200: #BFDBFE;
+$color-brand300: #93C5FD;
+$color-brand400: #60A5FA;
+$color-brand500: #3B82F6;
+$color-brand600: #2563EB;
+$color-brand700: #1D4ED8;
+$color-brand800: #1E40AF;
+$color-brand900: #1E3A8A;
+
+$color-primary: $color-brand500;
+$color-bg-page: #F8FAFC;
+$color-bg-card: #ffffff;
+$color-bg-hover: #F1F5F9;
+$color-bg-brand-tint: $color-brand50;
+
+$color-text-primary: #0F172A;
+$color-text-secondary: #334155;
+$color-text-tertiary: #64748B;
+$color-text-quaternary: #94A3B8;
+$color-text-white: #ffffff;
+
+$color-border: #E2E8F0;
+$color-border-light: #F1F5F9;
+$color-error: #EF4444;
+$color-success: #10B981;
+$color-warning: #F59E0B;
+
+$font-xs: 24rpx;
+$font-sm: 28rpx;
+$font-base: 32rpx;
+$font-lg: 36rpx;
+$font-xl: 40rpx;
+$font-2xl: 48rpx;
+$font-size-xs: $font-xs;
+$font-size-sm: $font-sm;
+$font-size-md: $font-base;
+$font-size-lg: $font-lg;
+$font-size-xl: $font-xl;
+$font-size-xxl: $font-2xl;
+
+$fw-light: 300;
+$fw-normal: 400;
+$fw-medium: 500;
+$fw-semibold: 600;
+$fw-bold: 700;
+$font-weight-light: $fw-light;
+$font-weight-normal: $fw-normal;
+$font-weight-medium: $fw-medium;
+$font-weight-semibold: $fw-semibold;
+$font-weight-bold: $fw-bold;
+
+$space1: 8rpx; $space2: 16rpx; $space3: 24rpx; $space4: 32rpx; $space6: 48rpx;
+$spacing-xs: $space1; $spacing-sm: $space2; $spacing-md: $space3; $spacing-lg: $space4; $spacing-xl: $space6;
+
+$radius-sm: 8rpx;
+$radius-md: 16rpx;
+$radius-lg: 24rpx;
+$radius-xl: 32rpx;
+$radius-round: 999rpx;
+$radius-button: $radius-round;
+
+$button-height-sm: 72rpx;
+$button-height-md: 80rpx;
+$button-height-lg: 96rpx;

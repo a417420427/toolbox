@@ -1,0 +1,178 @@
+// ============================================
+// 配色 / 间距 / 字阶 — 对齐 Flutter design tokens (DESIGN.md)
+// ============================================
+
+// ── Brand ──
+$color-brand50: #EFF6FF;
+$color-brand100: #DBEAFE;
+$color-brand200: #BFDBFE;
+$color-brand300: #93C5FD;
+$color-brand400: #60A5FA;
+$color-brand500: #3B82F6;
+$color-brand600: #2563EB;
+$color-brand700: #1D4ED8;
+$color-brand800: #1E40AF;
+$color-brand900: #1E3A8A;
+
+// ── Neutral ──
+$color-neutral50: #F8FAFC;
+$color-neutral100: #F1F5F9;
+$color-neutral200: #E2E8F0;
+$color-neutral300: #CBD5E1;
+$color-neutral400: #94A3B8;
+$color-neutral500: #64748B;
+$color-neutral600: #475569;
+$color-neutral700: #334155;
+$color-neutral800: #1E293B;
+$color-neutral900: #0F172A;
+
+// ── Semantic ──
+$color-success: #10B981;
+$color-warning: #F59E0B;
+$color-error: #EF4444;
+$color-info: #3B82F6;
+
+// ── Compose ──
+$color-primary: $color-brand500;
+$color-primary-light: $color-brand400;
+$color-primary-dark: $color-brand600;
+
+$color-bg-page: $color-neutral50;
+$color-bg-card: #ffffff;
+$color-bg-hover: $color-neutral100;
+$color-bg-brand-tint: $color-brand50;
+
+$color-text-primary: $color-neutral900;
+$color-text-secondary: $color-neutral700;
+$color-text-tertiary: $color-neutral500;
+$color-text-quaternary: $color-neutral400;
+$color-text-disabled: $color-neutral300;
+$color-text-white: #ffffff;
+
+$color-border: $color-neutral200;
+$color-border-light: $color-neutral100;
+$color-divider: $color-neutral200;
+
+// ── Spacing (DP → rpx, *2) ──
+$space1: 8rpx;
+$space2: 16rpx;
+$space3: 24rpx;
+$space4: 32rpx;
+$space5: 40rpx;
+$space6: 48rpx;
+$space8: 64rpx;
+$space10: 80rpx;
+$space12: 96rpx;
+
+$spacing-xs: $space1;
+$spacing-sm: $space2;
+$spacing-md: $space3;
+$spacing-lg: $space4;
+$spacing-xl: $space6;
+
+// ── Radius (DP → rpx, *2) ──
+$radius-sm: 8rpx;
+$radius-md: 16rpx;
+$radius-lg: 24rpx;
+$radius-xl: 32rpx;
+$radius-round: 999rpx;
+$radius-button: $radius-round;
+
+// ── Button height ──
+$button-height-sm: 72rpx;
+$button-height-md: 80rpx;
+$button-height-lg: 96rpx;
+
+// ── Font size (DP → rpx, *2) ──
+$font-xs: 24rpx;
+$font-sm: 28rpx;
+$font-base: 32rpx;
+$font-lg: 36rpx;
+$font-xl: 40rpx;
+$font-2xl: 48rpx;
+$font-3xl: 60rpx;
+
+$font-size-xs: $font-xs;
+$font-size-sm: $font-sm;
+$font-size-md: $font-base;
+$font-size-lg: $font-lg;
+$font-size-xl: $font-xl;
+$font-size-xxl: $font-2xl;
+
+// ── Line height ──
+$line-height-tight: 1.3;
+$line-height-normal: 1.5;
+$line-height-loose: 1.8;
+
+// ── Line height ──
+$line-height-tight: 1.3;
+$line-height-normal: 1.5;
+$line-height-loose: 1.8;
+
+// ── Font weight ──
+$fw-light: 300;
+$fw-normal: 400;
+$fw-medium: 500;
+$fw-semibold: 600;
+$fw-bold: 700;
+
+$font-weight-light: $fw-light;
+$font-weight-normal: $fw-normal;
+$font-weight-medium: $fw-medium;
+$font-weight-semibold: $fw-semibold;
+$font-weight-bold: $fw-bold;
+
+// ── Line height ──
+$line-height-tight: 1.3;
+$line-height-normal: 1.5;
+$line-height-loose: 1.8;
+
+// ── Layout ──
+$screen-width: 750rpx;
+$page-padding: $space4;
+$max-content-width: 686rpx;
+
+// ── Shadow ──
+$shadow-card: 0 2rpx 12rpx rgba(0,0,0,0.08);
+$shadow-card-hover: 0 4rpx 20rpx rgba(0,0,0,0.12);
+$shadow-float: 0 4rpx 16rpx rgba(0,0,0,0.1);
+$shadow-popup: 0 8rpx 32rpx rgba(0,0,0,0.15);
+
+// ── Transition ──
+$transition-fast: 0.15s ease;
+$transition-base: 0.25s ease;
+$transition-slow: 0.35s ease;
+
+// ── Mixins ──
+@mixin button-reset {
+  padding: 0;
+  margin: 0;
+  line-height: normal;
+  text-align: inherit;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  &::after { border: none; }
+}
+
+@mixin text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@mixin text-ellipsis-multi($lines: 2) {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: $lines;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
