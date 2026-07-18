@@ -1,3 +1,5 @@
+import 'dart:io' show Platform;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -68,7 +70,27 @@ void main() async {
     DeviceOrientation.landscapeRight,
   ]);
   runApp(const ToolboxApp());
+
+  // 注册 iOS Deep Link 通道
+  if (Platform.isIOS) {
+    _setupDeepLinkChannel();
+  }
 }
+
+/// 监听 iOS Widget Extension 发来的 Deep Link 跳转
+void _setupDeepLinkChannel() {
+  const channel = MethodChannel('com.toolbox/deeplink');
+  channel.setMethodCallHandler((call) async {
+    if (call.method == 'openTool' && call.arguments is String) {
+      final toolId = call.arguments as String;
+      _pendingToolId = toolId;
+    }
+  });
+}
+
+/// 小组件点击待跳转的工具 ID
+/// HomePage 在 build 时会消费这个值
+String? _pendingToolId;
 
 class ToolboxApp extends StatelessWidget {
   const ToolboxApp({super.key});
@@ -84,7 +106,6 @@ class ToolboxApp extends StatelessWidget {
         darkTheme: AppTheme.dark(),
         themeMode: ThemeMode.system,
         home: const HomePage(),
-
       ),
     );
   }
@@ -101,6 +122,11 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
+/// To allow external access via deep link
+/// Usage: HomePageState.onDeepLink(toolId)
+@visibleForTesting
+class HomePageState extends _HomePageState {}
+
 class _HomePageState extends State<HomePage> {
   _Tab _tab = _Tab.tools;
   String? _selectedToolId;
@@ -108,9 +134,26 @@ class _HomePageState extends State<HomePage> {
   // Dashboard 分类折叠状态
   final Set<ToolCategory> _collapsedCategories = {};
 
+  void onDeepLink(String toolId) {
+    if (ToolRegistry.byId(toolId) != null) {
+      setState(() {
+        _tab = _Tab.tools;
+        _selectedToolId = toolId;
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
+    // 消费来自 Widget Extension 的 Deep Link
+    if (_pendingToolId != null) {
+      final toolId = _pendingToolId!;
+      _pendingToolId = null;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        onDeepLink(toolId);
+      });
+    }
   }
 
   bool get _isOnDashboard => _selectedToolId == null;
@@ -516,6 +559,10 @@ class _HomePageState extends State<HomePage> {
                       onFavorite: auth.isLoggedIn
                           ? () => _handleFavorite(context, auth, tool)
                           : null,
+                      onAddToHomeScreen: () {
+                        // 在 iOS 上引导用户手动添加小组件
+                        _showAddWidgetGuide(context, tool);
+                      },
                     );
                   },
                 );
@@ -602,6 +649,36 @@ class _HomePageState extends State<HomePage> {
     return ToolPageContainer(
       toolId: _selectedToolId!,
       onBack: _goBackToDashboard,
+    );
+  }
+
+  /// 引导用户手动添加桌面小组件
+  void _showAddWidgetGuide(BuildContext context, ToolDefinition tool) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Row(
+          children: [
+            Icon(Icons.widgets_outlined, color: AppColors.brand500, size: 22),
+            const SizedBox(width: 8),
+            const Text('添加到桌面小组件'),
+          ],
+        ),
+        content: Text(
+          'iOS 需要手动添加小组件到桌面。\n\n'
+          '1. 长按桌面空白处进入编辑模式\n'
+          '2. 点击左上角 "+" 按钮\n'
+          '3. 搜索 "工具箱"\n'
+          '4. 选择小组件尺寸并添加到桌面\n\n'
+          '小组件上点击「${tool.name}」即可直接打开。',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(),
+            child: const Text('知道了'),
+          ),
+        ],
+      ),
     );
   }
 
@@ -767,28 +844,26 @@ class _ToolGridItem extends StatelessWidget {
               ),
             ),
             const Divider(height: 1),
-            if (onAddToHomeScreen != null)
-              ListTile(
-                leading: const Icon(Icons.widgets_outlined, color: AppColors.brand500),
-                title: const Text('添加到桌面小组件'),
-                subtitle: const Text('长按桌面添加后快速打开此工具'),
-                onTap: () {
-                  Navigator.of(ctx).pop();
-                  onAddToHomeScreen!();
-                },
+            ListTile(
+              leading: const Icon(Icons.widgets_outlined, color: AppColors.brand500),
+              title: const Text('添加到桌面小组件'),
+              subtitle: const Text('添加后长按小组件可更换工具'),
+              onTap: () {
+                Navigator.of(ctx).pop();
+                onAddToHomeScreen?.call();
+              },
+            ),
+            ListTile(
+              leading: Icon(
+                favorited ? Icons.star : Icons.star_border,
+                color: favorited ? AppColors.warning : AppColors.neutral600,
               ),
-            if (onFavorite != null)
-              ListTile(
-                leading: Icon(
-                  favorited ? Icons.star : Icons.star_border,
-                  color: favorited ? AppColors.warning : AppColors.neutral600,
-                ),
-                title: Text(favorited ? '取消收藏' : '收藏'),
-                onTap: () {
-                  Navigator.of(ctx).pop();
-                  onFavorite!();
-                },
-              ),
+              title: Text(favorited ? '取消收藏' : '收藏'),
+              onTap: () {
+                Navigator.of(ctx).pop();
+                onFavorite?.call();
+              },
+            ),
             const SizedBox(height: 8),
           ],
         ),

@@ -58,10 +58,10 @@ class _RandomSelectorPageState extends State<RandomSelectorPage> {
           padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
           child: SegmentedButton<int>(
             segments: const [
-              ButtonSegment(value: 0, label: Text('列表随机', style: TextStyle(fontSize: 12))),
+              ButtonSegment(value: 0, label: Text('列表', style: TextStyle(fontSize: 12))),
               ButtonSegment(value: 1, label: Text('抽签', style: TextStyle(fontSize: 12))),
-              ButtonSegment(value: 2, label: Text('随机数字', style: TextStyle(fontSize: 12))),
-              ButtonSegment(value: 3, label: Text('随机颜色', style: TextStyle(fontSize: 12))),
+              ButtonSegment(value: 2, label: Text('数字', style: TextStyle(fontSize: 12))),
+              ButtonSegment(value: 3, label: Text('颜色', style: TextStyle(fontSize: 12))),
             ],
             selected: {_tabIndex},
             onSelectionChanged: (v) => setState(() {
