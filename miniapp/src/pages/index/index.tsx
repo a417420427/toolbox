@@ -1,6 +1,6 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { View, Text, ScrollView, Input } from '@tarojs/components';
-import Taro from '@tarojs/taro';
+import Taro, { useShareAppMessage, useShareTimeline } from '@tarojs/taro';
 import classnames from 'classnames';
 import styles from './index.module.scss';
 import { categories, toolsByCategory } from '@/data/tools';
@@ -43,6 +43,22 @@ const IndexPage: React.FC = () => {
   const handleToolTap = (toolId: string) => {
     Taro.navigateTo({ url: `/pages/tool/index?toolId=${toolId}` });
   };
+
+  // 分享到好友
+  useShareAppMessage(
+    useCallback(() => ({
+      title: '个人工具箱 - 实用工具合集',
+      path: '/pages/index/index',
+    }), [])
+  );
+
+  // 分享到朋友圈
+  useShareTimeline(
+    useCallback(() => ({
+      title: '个人工具箱',
+      query: '',
+    }), [])
+  );
 
   const totalCount = useMemo(
     () => categories.reduce((sum, c) => sum + toolsByCategory(c.key).length, 0),

@@ -3,6 +3,7 @@ import { View, Text, ScrollView } from '@tarojs/components';
 import { useRouter } from '@tarojs/taro';
 import styles from './index.module.scss';
 import { toolById } from '@/data/tools';
+import { useToolShare } from '@/hooks/useShare';
 
 import JsonToolPage from './subpages/jsonToolPage';
 import Base64ToolPage from './subpages/base64ToolPage';
@@ -44,6 +45,13 @@ import UrlParserPage from './subpages/urlParserPage';
 import AesPage from './subpages/aesPage';
 import PomodoroPage from './subpages/pomodoroPage';
 import StopwatchPage from './subpages/stopwatchPage';
+import DrawingBoardPage from './subpages/drawingBoardPage';
+import RegexVisualizerPage from './subpages/regexVisualizerPage';
+import ColoringBookPage from './subpages/coloringBookPage';
+import MdNotebookPage from './subpages/mdNotebookPage';
+import WeatherPage from './subpages/weatherPage';
+import LunarCalendarPage from './subpages/lunarCalendarPage';
+import RetirementPage from './subpages/retirementPage';
 
 const toolPages: Record<string, React.FC> = {
   calculator: CalculatorPage,
@@ -86,6 +94,13 @@ const toolPages: Record<string, React.FC> = {
   cron: CronPage,
   text_case: TextCasePage,
   url_parser: UrlParserPage,
+  drawing_board: DrawingBoardPage,
+  regex_visualizer: RegexVisualizerPage,
+  coloring_book: ColoringBookPage,
+  md_notebook: MdNotebookPage,
+  weather: WeatherPage,
+  lunar_calendar: LunarCalendarPage,
+  retirement: RetirementPage,
 };
 
 const ToolPage: React.FC = () => {
@@ -93,6 +108,9 @@ const ToolPage: React.FC = () => {
   const toolId = router.params.toolId as string;
   const tool = useMemo(() => toolById(toolId), [toolId]);
   const ToolComponent = toolPages[toolId];
+
+  // 注册分享功能（右上角菜单 → 好友 + 朋友圈）
+  useToolShare(toolId);
 
   if (!tool) {
     return (

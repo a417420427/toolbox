@@ -13,6 +13,7 @@ export interface ToolDefinition {
 // 分类元信息
 export interface CategoryMeta {
   key: ToolCategory;
+  description: string;
   label: string;
   icon: string; // icon name
   color: string; // hex 色，用于分类标识

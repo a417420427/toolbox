@@ -5,7 +5,7 @@ build/
 .env.local
 *.log
 .DS_Store
-
+.pai
 # Flutter
 apps/mobile/build/
 apps/mobile/.dart_tool/
