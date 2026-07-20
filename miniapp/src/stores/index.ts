@@ -49,14 +49,21 @@ export const useAuthStore = create<AuthState>((set) => ({
 interface FavoritesState {
   favoriteIds: Set<string>;
   favorites: api.FavoriteItem[];
+  folders: api.FolderInfo[];
   loading: boolean;
   loadFavorites: () => Promise<void>;
+  loadFolders: () => Promise<void>;
   toggleFavorite: (toolId: string, name: string, description: string, icon: string) => Promise<void>;
+  moveFavorite: (toolId: string, folder: string) => Promise<void>;
+  createFolder: (name: string) => Promise<string | null>;
+  renameFolder: (oldName: string, newName: string) => Promise<string | null>;
+  deleteFolder: (name: string) => Promise<string | null>;
 }
 
 export const useFavoritesStore = create<FavoritesState>((set, get) => ({
   favoriteIds: new Set(),
   favorites: [],
+  folders: [],
   loading: false,
 
   loadFavorites: async () => {
@@ -76,6 +83,15 @@ export const useFavoritesStore = create<FavoritesState>((set, get) => ({
     } catch {
       set({ loading: false });
     }
+  },
+
+  loadFolders: async () => {
+    const token = api.getToken();
+    if (!token) return;
+    try {
+      const list = await api.getFolders();
+      set({ folders: list });
+    } catch {}
   },
 
   toggleFavorite: async (toolId, _name, _description, _icon) => {
@@ -99,6 +115,60 @@ export const useFavoritesStore = create<FavoritesState>((set, get) => ({
           favoriteIds: new Set(list.map((f) => f.toolId)),
         });
       } catch {}
+    }
+  },
+
+  moveFavorite: async (toolId, folder) => {
+    try {
+      const list = await api.moveFavorite(toolId, folder);
+      set({
+        favorites: list,
+        favoriteIds: new Set(list.map((f) => f.toolId)),
+      });
+    } catch {}
+  },
+
+  createFolder: async (name) => {
+    try {
+      const folder = await api.createFolder(name);
+      set((s) => ({ folders: [...s.folders, folder] }));
+      return null;
+    } catch (e: any) {
+      return e.message || '创建失败';
+    }
+  },
+
+  renameFolder: async (oldName, newName) => {
+    try {
+      await api.renameFolder(oldName, newName);
+      set((s) => ({
+        folders: s.folders.map((f) =>
+          f.name === oldName ? { ...f, name: newName } : f
+        ),
+        // 同步更新收藏中的 folder 名
+        favorites: s.favorites.map((f) =>
+          f.folder === oldName ? { ...f, folder: newName } : f
+        ),
+      }));
+      return null;
+    } catch (e: any) {
+      return e.message || '重命名失败';
+    }
+  },
+
+  deleteFolder: async (name) => {
+    try {
+      await api.deleteFolder(name);
+      set((s) => ({
+        folders: s.folders.filter((f) => f.name !== name),
+        // 该文件夹内的收藏移入未分类
+        favorites: s.favorites.map((f) =>
+          f.folder === name ? { ...f, folder: '' } : f
+        ),
+      }));
+      return null;
+    } catch (e: any) {
+      return e.message || '删除失败';
     }
   },
 }));

@@ -99,3 +99,36 @@ export async function addFavorite(toolId: string, folder?: string): Promise<Favo
 export async function removeFavorite(toolId: string): Promise<FavoritesList> {
   return request<FavoritesList>('DELETE', `/user/favorites/${toolId}`);
 }
+
+/** 移动收藏到文件夹 */
+export async function moveFavorite(toolId: string, folder: string): Promise<FavoritesList> {
+  return request<FavoritesList>('PUT', `/user/favorites/${toolId}/move`, { folder });
+}
+
+// ── Folders ──
+
+export interface FolderInfo {
+  id: string;
+  name: string;
+  sortOrder: number;
+}
+
+/** 获取文件夹列表 */
+export async function getFolders(): Promise<FolderInfo[]> {
+  return request<FolderInfo[]>('GET', '/user/favorites/folders');
+}
+
+/** 创建文件夹 */
+export async function createFolder(name: string): Promise<FolderInfo> {
+  return request<FolderInfo>('POST', '/user/favorites/folders', { name });
+}
+
+/** 重命名文件夹 */
+export async function renameFolder(oldName: string, newName: string): Promise<void> {
+  return request<void>('PUT', '/user/favorites/folders/rename', { oldName, newName });
+}
+
+/** 删除文件夹 */
+export async function deleteFolder(name: string): Promise<void> {
+  return request<void>('DELETE', `/user/favorites/folders/${encodeURIComponent(name)}`);
+}
