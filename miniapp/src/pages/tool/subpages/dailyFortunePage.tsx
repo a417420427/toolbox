@@ -3,7 +3,7 @@ import { View, Text, Picker, ScrollView } from '@tarojs/components';
 import CalendarPicker from '@/components/CalendarPicker';
 import type { CalendarValue } from '@/components/CalendarPicker';
 import toolStyles from '@/styles/tool-common.module.scss';
-import styles from './horoscope.module.scss';
+import styles from './dailyFortune.module.scss';
 
 // ── 星座数据 ──
 const ZODIACS = [
@@ -144,7 +144,7 @@ const defaultBirth: CalendarValue = {
   day: TODAY.getDate(),
 };
 
-const HoroscopePage: React.FC = () => {
+const DailyFortunePage: React.FC = () => {
   const [birth, setBirth] = useState<CalendarValue>(defaultBirth);
   const [selectedZodiac, setSelectedZodiac] = useState<number | null>(null);
 
@@ -247,4 +247,4 @@ const HoroscopePage: React.FC = () => {
   );
 };
 
-export default HoroscopePage;
+export default DailyFortunePage;

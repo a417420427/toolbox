@@ -1,5 +1,5 @@
 import { Controller, Post, Get, Body, UseGuards, Req } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags, ApiOperation } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags, ApiOperation, ApiBody } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
@@ -20,6 +20,13 @@ export class AuthController {
   @ApiOperation({ summary: '登录' })
   login(@Body() dto: LoginDto) {
     return this.auth.login(dto);
+  }
+
+  @Post('wechat-login')
+  @ApiOperation({ summary: '微信小程序静默登录' })
+  @ApiBody({ schema: { properties: { code: { type: 'string' } } } })
+  wechatLogin(@Body('code') code: string) {
+    return this.auth.wechatLogin(code);
   }
 
   @Get('profile')

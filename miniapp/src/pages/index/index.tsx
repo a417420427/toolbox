@@ -1,11 +1,13 @@
 import React, { useState, useMemo, useCallback } from 'react';
 import { View, Text, ScrollView, Input } from '@tarojs/components';
 import Taro, { useShareAppMessage, useShareTimeline } from '@tarojs/taro';
+
 import classnames from 'classnames';
 import styles from './index.module.scss';
 import { categories, toolsByCategory } from '@/data/tools';
 import type { ToolCategory } from '@/types/tool';
 import Icon from '@/components/Icon';
+import { useAuthStore, useFavoritesStore } from '@/stores';
 
 const IndexPage: React.FC = () => {
   const [collapsed, setCollapsed] = useState<Set<ToolCategory>>(new Set());
@@ -40,8 +42,30 @@ const IndexPage: React.FC = () => {
     });
   };
 
+  const favoriteIds = useFavoritesStore((s) => s.favoriteIds);
+  const toggleFavorite = useFavoritesStore((s) => s.toggleFavorite);
+  const ready = useAuthStore((s) => s.ready);
+
+  const isFavorited = useCallback((toolId: string) => {
+    return favoriteIds.has(toolId);
+  }, [favoriteIds]);
+
   const handleToolTap = (toolId: string) => {
     Taro.navigateTo({ url: `/pages/tool/index?toolId=${toolId}` });
+  };
+
+  const handleFavoriteTap = async (e: any, toolId: string, name: string, description: string, icon: string) => {
+    e.stopPropagation();
+    if (!ready) {
+      Taro.showToast({ title: '登录中，请稍候', icon: 'none' });
+      return;
+    }
+    const wasFavorited = favoriteIds.has(toolId);
+    await toggleFavorite(toolId, name, description, icon);
+    Taro.showToast({
+      title: wasFavorited ? '已取消收藏' : '已收藏',
+      icon: wasFavorited ? 'none' : 'success',
+    });
   };
 
   // 分享到好友
@@ -134,6 +158,12 @@ const IndexPage: React.FC = () => {
                       <View className={styles.toolIconWrap}>
                         <Icon name={tool.icon} size={40} color="#3b82f6" strokeWidth={1.8} />
                       </View>
+                      <Text
+                        className={styles.cardFavorite}
+                        onClick={(e) => handleFavoriteTap(e, tool.id, tool.name, tool.description, tool.icon)}
+                      >
+                        {isFavorited(tool.id) ? '★' : '☆'}
+                      </Text>
                       <Text className={styles.toolName}>{tool.name}</Text>
                       <Text className={styles.toolDesc}>{tool.description}</Text>
                     </View>

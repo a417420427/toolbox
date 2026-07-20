@@ -10,7 +10,8 @@ export const categories: CategoryMeta[] = [
 
 export const tools: ToolDefinition[] = [
   // ── 娱乐工具 ──
-  { id: 'horoscope', name: '星座运势', description: '今日星座运势 / 幸运信息', icon: 'smile', category: 'fun' },
+  { id: 'daily_fortune', name: '星座运势', description: '星座运势 / 幸运色 / 幸运数字', icon: 'smile', category: 'fun' },
+  { id: 'tarot', name: '塔罗占卜', description: '每日塔罗牌抽牌 / 占卜解读', icon: 'smile', category: 'fun' },
   { id: 'drawing_board', name: '简易画板', description: '手写 / 画笔 / 颜色选择', icon: 'pen-tool', category: 'fun' },
   { id: 'coloring_book', name: '绘画填色', description: '线稿模板填色', icon: 'paintbrush', category: 'fun' },
   { id: 'weather', name: '天气查询', description: '实时天气 / 预报', icon: 'cloud-sun', category: 'fun' },

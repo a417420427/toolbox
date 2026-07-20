@@ -1,0 +1,181 @@
+// ── 卡片展示区 ──
+.cardArea {
+  display: flex;
+  justify-content: center;
+  padding: 48rpx 0 24rpx;
+}
+
+.placeCard {
+  width: 320rpx;
+  height: 460rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+  border: 2rpx dashed #cbd5e1;
+  border-radius: 24rpx;
+}
+
+.placeIcon {
+  font-size: 80rpx;
+  margin-bottom: 16rpx;
+}
+
+.placeText {
+  font-size: 24rpx;
+  color: #94a3b8;
+}
+
+// ── 翻牌卡片 3D ──
+.flipCard {
+  width: 320rpx;
+  height: 460rpx;
+  perspective: 1000rpx;
+}
+
+.flipInner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+  border-radius: 24rpx;
+}
+
+.flipped .flipInner {
+  transform: rotateY(180deg);
+}
+
+.flipFront,
+.flipBack {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 24rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.flipFront {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  border: 4rpx solid #a78bfa;
+}
+
+.flipBack {
+  background: linear-gradient(135deg, #1e1b4b, #312e81);
+  border: 4rpx solid #6366f1;
+  transform: rotateY(180deg);
+}
+
+.flipPattern {
+  font-size: 60rpx;
+  color: rgba(255, 255, 255, 0.6);
+  letter-spacing: 12rpx;
+}
+
+.flipping {
+  animation: pulse 0.8s ease-in-out infinite alternate;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.05); }
+}
+
+// ── 卡牌正面内容（翻牌后） ──
+.tarotNumber {
+  font-size: 48rpx;
+  font-weight: 700;
+  color: #c4b5fd;
+  margin-bottom: 12rpx;
+}
+
+.tarotName {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 8rpx;
+}
+
+.tarotEn {
+  font-size: 22rpx;
+  color: #a78bfa;
+  margin-bottom: 16rpx;
+}
+
+.tarotPosition {
+  font-size: 24rpx;
+  font-weight: 600;
+  color: #fbbf24;
+  padding: 6rpx 20rpx;
+  background: rgba(251, 191, 36, 0.15);
+  border-radius: 999rpx;
+}
+
+// ── 解读区域 ──
+.readingCard {
+  background: #fff;
+  border: 1rpx solid #e2e8f0;
+  border-radius: 12rpx;
+  padding: 20rpx;
+  margin-bottom: 12rpx;
+}
+
+.readingTitle {
+  font-size: 24rpx;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 12rpx;
+  display: block;
+}
+
+.readingLabel {
+  font-size: 22rpx;
+  font-weight: 600;
+  color: #8b5cf6;
+  margin-bottom: 8rpx;
+  display: block;
+}
+
+.readingText {
+  font-size: 24rpx;
+  color: #475569;
+  line-height: 1.6;
+}
+
+.tipCard {
+  background: #f8fafc;
+  border: 1rpx solid #e2e8f0;
+  border-radius: 12rpx;
+  padding: 20rpx;
+  margin-bottom: 12rpx;
+}
+
+// ── 抽牌按钮 ──
+.drawBtnWrap {
+  display: flex;
+  justify-content: center;
+  padding: 16rpx 0 48rpx;
+}
+
+.drawBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 80rpx;
+  padding: 0 48rpx;
+  background: linear-gradient(135deg, #8b5cf6, #6366f1);
+  border-radius: 999rpx;
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #fff;
+  box-shadow: 0 4rpx 16rpx rgba(99, 102, 241, 0.3);
+}
+
+.drawBtn:active {
+  opacity: 0.85;
+}
