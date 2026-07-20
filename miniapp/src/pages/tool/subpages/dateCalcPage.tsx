@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, Input, Button, Picker } from '@tarojs/components';
+import CalendarPicker from '@/components/CalendarPicker';
+import type { CalendarValue } from '@/components/CalendarPicker';
 import { DateCalcTool, isLeapYear } from '@/utils/tools/dateCalcTool';
 import toolStyles from '@/styles/tool-common.module.scss';
 
@@ -8,59 +10,60 @@ const tabs = ['日期差', '加减天数', '周数计算', '年龄计算', '闰�
 const DateCalcPage: React.FC = () => {
   const [tab, setTab] = useState(0);
   // 日期差
-  const [startDate, setStartDate] = useState('2020-01-01');
-  const [endDate, setEndDate] = useState('2026-07-18');
+  const [startDate, setStartDate] = useState<CalendarValue>({ year: 2020, month: 1, day: 1 });
+  const [endDate, setEndDate] = useState<CalendarValue>({ year: 2026, month: 7, day: 18 });
   // 加减天数
-  const [baseDate, setBaseDate] = useState('2026-07-18');
+  const [baseDate, setBaseDate] = useState<CalendarValue>({ year: 2026, month: 7, day: 18 });
   const [days, setDays] = useState('100');
   // 周数
-  const [weekDate, setWeekDate] = useState('2026-07-18');
+  const [weekDate, setWeekDate] = useState<CalendarValue>({ year: 2026, month: 7, day: 18 });
   const [weeks, setWeeks] = useState('10');
   // 年龄
-  const [birthDate, setBirthDate] = useState('1990-01-01');
+  const [birthDate, setBirthDate] = useState<CalendarValue>({ year: 1990, month: 1, day: 1 });
   // 闰年
-  const [leapYear, setLeapYear] = useState('2026');
+  const [leapYearStr, setLeapYearStr] = useState('2026');
   // 输出
   const [output, setOutput] = useState('');
 
+  const toDate = (v: CalendarValue) => new Date(v.year, v.month - 1, v.day);
+  const fmt = (v: CalendarValue) =>
+    `${v.year}-${String(v.month).padStart(2, '0')}-${String(v.day).padStart(2, '0')}`;
+
   const processDiff = () => {
-    const s = new Date(startDate);
-    const e = new Date(endDate);
-    if (isNaN(s.getTime()) || isNaN(e.getTime())) { setOutput('请输入有效日期'); return; }
+    const s = toDate(startDate);
+    const e = toDate(endDate);
     const r = DateCalcTool.dateDiff(s, e);
     const wd = DateCalcTool.weekdaysBetween(s, e);
     setOutput(
-      `开始: ${startDate}\n结束: ${endDate}\n\n相差天数: ${r.totalDays}\n相差小时: ${r.hours}\n相差分钟: ${r.minutes}\n工作日: ${wd}`
+      `开始: ${fmt(startDate)}\n结束: ${fmt(endDate)}\n\n相差天数: ${r.totalDays}\n相差小时: ${r.hours}\n相差分钟: ${r.minutes}\n工作日: ${wd}`
     );
   };
 
   const processAdd = () => {
-    const d = new Date(baseDate);
-    if (isNaN(d.getTime())) { setOutput('请输入有效日期'); return; }
+    const d = toDate(baseDate);
     const n = parseInt(days, 10);
     if (isNaN(n)) { setOutput('请输入有效天数'); return; }
     const r = DateCalcTool.addDays(d, n);
-    setOutput(`${baseDate} 之后 ${n} 天:\n${formatDate(r)}`);
+    setOutput(`${fmt(baseDate)} 之后 ${n} 天:\n${formatDate(r)}`);
   };
 
   const processWeeks = () => {
-    const d = new Date(weekDate);
-    if (isNaN(d.getTime())) { setOutput('请输入有效日期'); return; }
+    const d = toDate(weekDate);
     const n = parseInt(weeks, 10);
     if (isNaN(n)) { setOutput('请输入有效周数'); return; }
     const r = DateCalcTool.addWeeks(d, n);
-    setOutput(`${weekDate} 之后 ${n} 周:\n${formatDate(r)}`);
+    setOutput(`${fmt(weekDate)} 之后 ${n} 周:\n${formatDate(r)}`);
   };
 
   const processAge = () => {
-    const b = new Date(birthDate);
+    const b = toDate(birthDate);
     if (isNaN(b.getTime())) { setOutput('请输入有效日期'); return; }
     const r = DateCalcTool.age(b);
-    setOutput(`出生: ${birthDate}\n年龄: ${r.years} 岁 ${r.months} 月 ${r.days} 天`);
+    setOutput(`出生: ${fmt(birthDate)}\n年龄: ${r.years} 岁 ${r.months} 月 ${r.days} 天`);
   };
 
   const processLeap = () => {
-    const y = parseInt(leapYear, 10);
+    const y = parseInt(leapYearStr, 10);
     if (isNaN(y)) { setOutput('请输入有效年份'); return; }
     setOutput(`${y} 年${isLeapYear(y) ? '是' : '不是'}闰年\n2月有 ${DateCalcTool.daysInMonth(y, 2)} 天`);
   };
@@ -81,27 +84,27 @@ const DateCalcPage: React.FC = () => {
       </View>
       {tab === 0 && (
         <View>
-          <View className={toolStyles.inputGroup}><Text className={toolStyles.label}>开始日期</Text><Input className={toolStyles.input} type="text" value={startDate} onInput={e => setStartDate(e.detail.value)} placeholder="YYYY-MM-DD" /></View>
-          <View className={toolStyles.inputGroup}><Text className={toolStyles.label}>结束日期</Text><Input className={toolStyles.input} type="text" value={endDate} onInput={e => setEndDate(e.detail.value)} placeholder="YYYY-MM-DD" /></View>
+          <CalendarPicker title='开始日期' value={startDate} onChange={setStartDate} />
+          <CalendarPicker title='结束日期' value={endDate} onChange={setEndDate} />
         </View>
       )}
       {tab === 1 && (
         <View>
-          <View className={toolStyles.inputGroup}><Text className={toolStyles.label}>基准日期</Text><Input className={toolStyles.input} type="text" value={baseDate} onInput={e => setBaseDate(e.detail.value)} placeholder="YYYY-MM-DD" /></View>
+          <CalendarPicker title='基准日期' value={baseDate} onChange={setBaseDate} />
           <View className={toolStyles.inputGroup}><Text className={toolStyles.label}>天数</Text><Input className={toolStyles.input} type="text" value={days} onInput={e => setDays(e.detail.value)} placeholder="天数" /></View>
         </View>
       )}
       {tab === 2 && (
         <View>
-          <View className={toolStyles.inputGroup}><Text className={toolStyles.label}>基准日期</Text><Input className={toolStyles.input} type="text" value={weekDate} onInput={e => setWeekDate(e.detail.value)} placeholder="YYYY-MM-DD" /></View>
+          <CalendarPicker title='基准日期' value={weekDate} onChange={setWeekDate} />
           <View className={toolStyles.inputGroup}><Text className={toolStyles.label}>周数</Text><Input className={toolStyles.input} type="text" value={weeks} onInput={e => setWeeks(e.detail.value)} placeholder="周数" /></View>
         </View>
       )}
       {tab === 3 && (
-        <View className={toolStyles.inputGroup}><Text className={toolStyles.label}>出生日期</Text><Input className={toolStyles.input} type="text" value={birthDate} onInput={e => setBirthDate(e.detail.value)} placeholder="YYYY-MM-DD" /></View>
+        <CalendarPicker title='出生日期' value={birthDate} onChange={setBirthDate} />
       )}
       {tab === 4 && (
-        <View className={toolStyles.inputGroup}><Text className={toolStyles.label}>年份</Text><Input className={toolStyles.input} type="text" value={leapYear} onInput={e => setLeapYear(e.detail.value)} placeholder="YYYY" /></View>
+        <View className={toolStyles.inputGroup}><Text className={toolStyles.label}>年份</Text><Input className={toolStyles.input} type="text" value={leapYearStr} onInput={e => setLeapYearStr(e.detail.value)} placeholder="YYYY" /></View>
       )}
       <View className={toolStyles.actionRow}>
         <Button className={toolStyles.btnPrimary} onClick={actions[tab]}>计算</Button>

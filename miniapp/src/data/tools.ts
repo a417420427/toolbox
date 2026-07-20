@@ -1,31 +1,37 @@
 import { CategoryMeta, ToolDefinition } from '@/types/tool';
 
 export const categories: CategoryMeta[] = [
+  { key: 'fun', label: '娱乐工具', description: '星座、画板、填色等', icon: 'cat_tools', color: '#f43f5e' },
   { key: 'tools', label: '日常工具', description: '计算器、日期、健康等', color: '#3b82f6' },
   { key: 'formatters', label: '格式化 & 转换', description: 'JSON、SQL、颜色等', color: '#10b981' },
   { key: 'crypto', label: '编码 & 加密', description: 'Base64、Hash、AES等', color: '#8b5cf6' },
   { key: 'dev', label: '开发者工具', description: 'IP、Regex、Cron等', color: '#f59e0b' },
-  { key: 'new', label: '新增工具', description: '画板、天气预报等', color: '#f97316' },
 ];
 
 export const tools: ToolDefinition[] = [
+  // ── 娱乐工具 ──
+  { id: 'horoscope', name: '星座运势', description: '今日星座运势 / 幸运信息', icon: 'smile', category: 'fun' },
+  { id: 'drawing_board', name: '简易画板', description: '手写 / 画笔 / 颜色选择', icon: 'pen-tool', category: 'fun' },
+  { id: 'coloring_book', name: '绘画填色', description: '线稿模板填色', icon: 'paintbrush', category: 'fun' },
+  { id: 'weather', name: '天气查询', description: '实时天气 / 预报', icon: 'cloud-sun', category: 'fun' },
+  { id: 'emoji', name: 'Emoji 搜索', description: '搜索并复制 Emoji', icon: 'smile', category: 'fun' },
+  { id: 'random_selector', name: '随机选择器', description: '抛硬币 / 抽签 / 列表随机选', icon: 'dice', category: 'fun' },
+
   // ── 日常工具 ──
   { id: 'calculator', name: '计算器', description: '日常计算 / 科学计算', icon: 'calculator', category: 'tools' },
   { id: 'unit_converter', name: '单位换算', description: '长度 / 重量 / 温度等', icon: 'ruler', category: 'tools' },
   { id: 'date_calc', name: '日期计算', description: '日期差 / 加减天数 / 工作日', icon: 'calendar', category: 'tools' },
   { id: 'countdown', name: '倒计时', description: '设定目标日期，显示剩余时间', icon: 'clock', category: 'tools' },
-  { id: 'random_selector', name: '随机选择器', description: '抛硬币 / 抽签 / 列表随机选', icon: 'dice', category: 'tools' },
   { id: 'text_stats', name: '字数统计', description: '字符 / 单词 / 行数统计', icon: 'bar-chart', category: 'tools' },
   { id: 'pomodoro', name: '番茄钟', description: '25分钟专注 / 5分钟休息', icon: 'timer', category: 'tools' },
   { id: 'stopwatch', name: '秒表', description: '计时 / 分段计时 / 计圈', icon: 'stopwatch', category: 'tools' },
   { id: 'mortgage', name: '房贷计算器', description: '等额本息 / 等额本金', icon: 'home', category: 'tools' },
-  { id: 'retirement', name: '退休倒计时', description: '出生日期 → 退休倒计时', icon: 'clock', category: 'tools' },
-  { id: 'holiday', name: '节假日', description: '法定假日 / 倒计时', icon: 'calendar-check', category: 'tools' },
+  { id: 'holiday', name: '节假日', description: '法定假日 / 日历标记', icon: 'calendar-check', category: 'tools' },
   { id: 'anniversary', name: '纪念日', description: '恋爱 / 生日 / 倒数日', icon: 'heart', category: 'tools' },
   { id: 'timezone', name: '世界时区', description: '全球时区 / 实时时间', icon: 'globe', category: 'tools' },
-  { id: 'emoji', name: 'Emoji 搜索', description: '搜索并复制 Emoji', icon: 'smile', category: 'tools' },
   { id: 'investment', name: '投资计算', description: '复利 / 定投 / 收益', icon: 'trending-up', category: 'tools' },
   { id: 'bmi', name: '健康指标', description: 'BMI / 体脂率 / BMR', icon: 'activity', category: 'tools' },
+  { id: 'retirement', name: '退休倒计时', description: '出生日期 / 工作生涯进度', icon: 'timer', category: 'tools' },
 
   // ── 格式化 & 转换 ──
   { id: 'json', name: 'JSON 工具', description: '格式化 / 压缩 / 校验', icon: 'braces', category: 'formatters' },
@@ -57,14 +63,9 @@ export const tools: ToolDefinition[] = [
   { id: 'cron', name: 'Cron 解析器', description: 'Cron → 可读描述', icon: 'clock', category: 'dev' },
   { id: 'text_case', name: '文字格式互转', description: '大小写 / 驼峰 / 蛇形', icon: 'text', category: 'dev' },
   { id: 'url_parser', name: 'URL 解析器', description: '协议 / 域名 / 参数', icon: 'link', category: 'dev' },
-
-  // ── 新增工具 ──
-  { id: 'drawing_board', name: '简易画板', description: '手写 / 画笔 / 颜色选择', icon: 'pen-tool', category: 'new' },
-  { id: 'regex_visualizer', name: '正则可视化', description: '正则表达式流程图', icon: 'git-branch', category: 'new' },
-  { id: 'coloring_book', name: '绘画填色', description: '线稿模板填色', icon: 'paintbrush', category: 'new' },
-  { id: 'md_notebook', name: 'Markdown 笔记本', description: '本地 Markdown 笔记', icon: 'book', category: 'new' },
-  { id: 'weather', name: '天气查询', description: '实时天气 / 预报', icon: 'cloud-sun', category: 'new' },
-  { id: 'lunar_calendar', name: '农历黄历', description: '公历农历互转', icon: 'calendar', category: 'new' },
+  { id: 'regex_visualizer', name: '正则可视化', description: '正则表达式流程图', icon: 'git-branch', category: 'dev' },
+  { id: 'md_notebook', name: 'Markdown 笔记本', description: '本地 Markdown 笔记', icon: 'book', category: 'dev' },
+  { id: 'lunar_calendar', name: '农历黄历', description: '公历农历互转', icon: 'calendar', category: 'dev' },
 ];
 
 export function toolsByCategory(categoryKey: string): ToolDefinition[] {

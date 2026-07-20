@@ -1,0 +1,144 @@
+.wrap {
+  margin-bottom: 24rpx;
+}
+
+.title {
+  display: block;
+  font-size: 24rpx;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 12rpx;
+}
+
+// ── 月份导航 ──
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12rpx;
+  margin-bottom: 16rpx;
+}
+
+.navLeft,
+.navRight {
+  display: flex;
+  gap: 4rpx;
+}
+
+.navIcon {
+  width: 56rpx;
+  height: 56rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28rpx;
+  color: #64748b;
+  border-radius: 50%;
+  user-select: none;
+
+  &:active {
+    background: #f1f5f9;
+  }
+}
+
+.navTitle {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+// ── 星期行 ──
+.weekRow {
+  display: flex;
+  margin-bottom: 8rpx;
+}
+
+.weekCell {
+  flex: 1;
+  text-align: center;
+  font-size: 22rpx;
+  color: #94a3b8;
+  line-height: 48rpx;
+}
+
+.weekend {
+  color: #ef4444;
+}
+
+// ── 日期网格 ──
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.cell {
+  width: 14.2857%; // 1/7
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.dayCell {
+  border-radius: 50%;
+  cursor: pointer;
+  user-select: none;
+}
+
+.dayCell:active {
+  background: #eff6ff;
+}
+
+.dayText {
+  font-size: 26rpx;
+  color: #1a1a1a;
+}
+
+.weekend {
+  .dayText {
+    color: #ef4444;
+  }
+}
+
+.today {
+  background: #eff6ff;
+
+  .todayText {
+    color: #3b82f6;
+    font-weight: 600;
+  }
+}
+
+.selected {
+  background: #3b82f6;
+
+  .selectedText {
+    color: #ffffff;
+    font-weight: 700;
+  }
+
+  &.weekend .selectedText {
+    color: #ffffff;
+  }
+}
+
+// ── 回到今天 ──
+.todayRow {
+  display: flex;
+  justify-content: center;
+  margin-top: 12rpx;
+}
+
+.todayBtn {
+  font-size: 22rpx;
+  color: #3b82f6;
+  padding: 8rpx 24rpx;
+  border: 1rpx solid #bfdbfe;
+  border-radius: 999rpx;
+  user-select: none;
+
+  &:active {
+    background: #eff6ff;
+  }
+}

@@ -52,6 +52,7 @@ import MdNotebookPage from './subpages/mdNotebookPage';
 import WeatherPage from './subpages/weatherPage';
 import LunarCalendarPage from './subpages/lunarCalendarPage';
 import RetirementPage from './subpages/retirementPage';
+import HoroscopePage from './subpages/horoscopePage';
 
 const toolPages: Record<string, React.FC> = {
   calculator: CalculatorPage,
@@ -101,6 +102,7 @@ const toolPages: Record<string, React.FC> = {
   weather: WeatherPage,
   lunar_calendar: LunarCalendarPage,
   retirement: RetirementPage,
+  horoscope: HoroscopePage,
 };
 
 const ToolPage: React.FC = () => {

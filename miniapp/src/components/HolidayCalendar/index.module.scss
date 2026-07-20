@@ -1,0 +1,51 @@
+// ── 格子上的节日小标签 ──
+.badge {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 16rpx;
+  color: #ef4444;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+// ── 当月节日列表 ──
+.holidayList {
+  margin-top: 12rpx;
+  padding: 0 8rpx;
+}
+
+.holidayItem {
+  display: flex;
+  align-items: center;
+  padding: 10rpx 0;
+  border-bottom: 1rpx solid #f1f5f9;
+}
+
+.holidayItem:last-child {
+  border-bottom: none;
+}
+
+.holidayDot {
+  width: 10rpx;
+  height: 10rpx;
+  border-radius: 50%;
+  background: #ef4444;
+  margin-right: 12rpx;
+  flex-shrink: 0;
+}
+
+.holidayName {
+  font-size: 24rpx;
+  font-weight: 500;
+  color: #1a1a1a;
+  flex: 1;
+}
+
+.holidayDate {
+  font-size: 22rpx;
+  color: #94a3b8;
+  flex-shrink: 0;
+}

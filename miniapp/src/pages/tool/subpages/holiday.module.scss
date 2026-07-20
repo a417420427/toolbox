@@ -1,0 +1,132 @@
+// ── 最近假日卡片 ──
+.nearestCard {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  margin: 24rpx 0;
+  padding: 24rpx 24rpx;
+  background: linear-gradient(135deg, #eff6ff, #f5f3ff);
+  border: 1rpx solid #bfdbfe;
+  border-radius: 16rpx;
+}
+
+.nearestIcon {
+  font-size: 36rpx;
+  flex-shrink: 0;
+}
+
+.nearestName {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #1a1a1a;
+  display: block;
+  margin-bottom: 4rpx;
+}
+
+.nearestDate {
+  font-size: 22rpx;
+  color: #64748b;
+}
+
+.nearestCountdown {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.nearestDays {
+  font-size: 40rpx;
+  font-weight: 700;
+  color: #3b82f6;
+  line-height: 1;
+}
+
+.nearestLabel {
+  font-size: 20rpx;
+  color: #94a3b8;
+  margin-top: 4rpx;
+}
+
+// ── 全年列表 ──
+.yearSection {
+  margin: 0 0 48rpx;
+}
+
+.yearTitle {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 16rpx;
+  display: block;
+}
+
+// ── 月份卡片 ──
+.monthCard {
+  background: #ffffff;
+  border: 1rpx solid #e2e8f0;
+  border-radius: 12rpx;
+  margin-bottom: 12rpx;
+  overflow: hidden;
+  transition: all 0.2s;
+}
+
+.monthCard:active {
+  border-color: #93c5fd;
+}
+
+.monthCardActive {
+  border-color: #3b82f6;
+  box-shadow: 0 2rpx 12rpx rgba(59, 130, 246, 0.12);
+}
+
+.monthHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16rpx 20rpx;
+  background: #f8fafc;
+  border-bottom: 1rpx solid #f1f5f9;
+}
+
+.monthName {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.monthCount {
+  font-size: 20rpx;
+  color: #94a3b8;
+}
+
+.monthItems {
+  padding: 8rpx 20rpx;
+}
+
+.holidayRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14rpx 0;
+  border-bottom: 1rpx solid #f8fafc;
+}
+
+.holidayRow:last-child {
+  border-bottom: none;
+}
+
+.holidayTag {
+  font-size: 24rpx;
+  color: #1a1a1a;
+  padding: 4rpx 12rpx;
+  background: #fef2f2;
+  border-radius: 6rpx;
+  font-weight: 500;
+}
+
+.holidayDay {
+  font-size: 22rpx;
+  color: #94a3b8;
+  flex-shrink: 0;
+}

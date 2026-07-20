@@ -1,145 +1,107 @@
 import React, { useState, useMemo } from 'react';
-import { View, Text, Input, Picker, Button } from '@tarojs/components';
+import { View, Text, Picker, Input } from '@tarojs/components';
+import CalendarPicker, { type CalendarValue } from '@/components/CalendarPicker';
 import toolStyles from '@/styles/tool-common.module.scss';
 
-interface RetirementInfo {
-  /** 退休日期 */
-  retirementDate: Date;
-  /** 出生日期 */
-  birthDate: Date;
-  /** 退休年龄（岁） */
-  retirementAge: number;
-  /** 退休年份 */
-  retirementYear: number;
+interface CalcResult {
+  totalDays: number;
+  yearsLeft: number;
+  monthsLeft: number;
+  daysLeft: number;
+  isRetired: boolean;
+  retireDate: Date;
+  retiredYears: number;
+  totalWorkDays: number;
+  workedDays: number;
+  remainingWorkDays: number;
+  workProgress: number;
 }
 
-function calcRetirement(birthStr: string, age: number): RetirementInfo | null {
-  const birth = new Date(birthStr);
-  if (isNaN(birth.getTime()) || age < 18 || age > 80) return null;
+function calcDayDiff(a: Date, b: Date): number {
+  return Math.ceil((b.getTime() - a.getTime()) / (1000 * 60 * 60 * 24));
+}
 
-  const retireDate = new Date(birth);
-  retireDate.setFullYear(retireDate.getFullYear() + age);
-  // 退休当月1号 00:00
-  retireDate.setDate(1);
+function compute(birth: CalendarValue, retireAge: number, workAge: number): CalcResult | null {
+  const birthDate = new Date(birth.year, birth.month - 1, birth.day);
+  if (isNaN(birthDate.getTime()) || retireAge < 33 || retireAge > 80) return null;
+  if (workAge < 16 || workAge > 65) return null;
+
+  const retireDate = new Date(birthDate);
+  retireDate.setFullYear(retireDate.getFullYear() + retireAge, 0, 1);
   retireDate.setHours(0, 0, 0, 0);
 
+  const now = new Date();
+  now.setHours(0, 0, 0, 0);
+  const diff = retireDate.getTime() - now.getTime();
+  const totalDays = Math.ceil(diff / (1000 * 60 * 60 * 24));
+  const isRetired = totalDays <= 0;
+
+  let yearsLeft = 0, monthsLeft = 0, daysLeft = 0, retiredYears = 0;
+
+  if (isRetired) {
+    retiredYears = Math.floor(Math.abs(totalDays) / 365);
+  } else {
+    yearsLeft = Math.floor(totalDays / 365);
+    monthsLeft = Math.floor((totalDays % 365) / 30);
+    daysLeft = totalDays % 30;
+  }
+
+  const workStart = new Date(birthDate);
+  workStart.setFullYear(workStart.getFullYear() + workAge);
+  const totalWorkDays = calcDayDiff(workStart, retireDate);
+  const workedDays = now > workStart ? calcDayDiff(workStart, now > retireDate ? retireDate : now) : 0;
+  const remainingWorkDays = Math.max(0, totalWorkDays - workedDays);
+  const workProgress = totalWorkDays > 0 ? workedDays / totalWorkDays : 0;
+
   return {
-    retirementDate: retireDate,
-    birthDate: birth,
-    retirementAge: age,
-    retirementYear: retireDate.getFullYear(),
+    totalDays: isRetired ? Math.abs(totalDays) : totalDays,
+    yearsLeft, monthsLeft, daysLeft, isRetired, retireDate, retiredYears,
+    totalWorkDays, workedDays, remainingWorkDays, workProgress,
   };
 }
 
-function formatDate(d: Date): string {
-  return `${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日`;
-}
-
-// 生成出生年份 Picker 选项
-function yearRange(): number[] {
-  const y = new Date().getFullYear();
-  const years: number[] = [];
-  for (let i = y - 80; i <= y - 18; i++) years.push(i);
-  return years;
-}
-
-const months = Array.from({ length: 12 }, (_, i) => i + 1);
-const days = Array.from({ length: 31 }, (_, i) => i + 1);
-const ages = Array.from({ length: 48 }, (_, i) => i + 33); // 33 ~ 80
+const ages = Array.from({ length: 48 }, (_, i) => i + 33);
+const workAges = Array.from({ length: 40 }, (_, i) => i + 18);
 
 const RetirementPage: React.FC = () => {
-  const years = useMemo(() => yearRange(), []);
-
-  const [birthYearIdx, setBirthYearIdx] = useState(years.length - 50); // default ~1990
-  const [birthMonthIdx, setBirthMonthIdx] = useState(0);
-  const [birthDayIdx, setBirthDayIdx] = useState(0);
-  const [ageIdx, setAgeIdx] = useState(ages.indexOf(60)); // default 60岁
-
-  const birthYear = years[birthYearIdx];
-  const birthMonth = months[birthMonthIdx];
-  const birthDay = days[birthDayIdx];
+  const [birth, setBirth] = useState<CalendarValue>({ year: 1990, month: 1, day: 1 });
+  const [ageIdx, setAgeIdx] = useState(ages.indexOf(60));
+  const [workAgeIdx, setWorkAgeIdx] = useState(workAges.indexOf(22));
   const retireAge = ages[ageIdx];
-
-  const birthStr = `${birthYear}-${String(birthMonth).padStart(2, '0')}-${String(birthDay).padStart(2, '0')}`;
-
-  const result = useMemo(() => {
-    const r = calcRetirement(birthStr, retireAge);
-    if (!r) return null;
-
-    const now = new Date();
-    now.setHours(0, 0, 0, 0);
-    const diff = r.retirementDate.getTime() - now.getTime();
-    const totalDays = Math.ceil(diff / (1000 * 60 * 60 * 24));
-
-    const yearsLeft = Math.floor(totalDays / 365);
-    const monthsLeft = Math.floor((totalDays % 365) / 30);
-    const daysLeft = totalDays % 30;
-
-    // 工作总天数（从法定工作年龄 22 到退休）
-    let workDays = 0;
-    const workStart = new Date(r.birthDate);
-    workStart.setFullYear(workStart.getFullYear() + 22);
-    const totalWorkMs = r.retirementDate.getTime() - workStart.getTime();
-    if (totalWorkMs > 0) {
-      workDays = Math.ceil(totalWorkMs / (1000 * 60 * 60 * 24));
-    }
-
-    return {
-      totalDays,
-      yearsLeft,
-      monthsLeft,
-      daysLeft,
-      isAlreadyRetired: totalDays <= 0,
-      retirementDate: r.retirementDate,
-      retiredYears: totalDays <= 0 ? Math.floor(Math.abs(totalDays) / 365) : 0,
-      workDays,
-    };
-  }, [birthStr, retireAge]);
+  const workAge = workAges[workAgeIdx];
+  const result = useMemo(() => compute(birth, retireAge, workAge), [birth, retireAge, workAge]);
 
   return (
     <View>
-      {/* 出生年月日选择 */}
-      <View className={toolStyles.section}>
-        <Text className={toolStyles.sectionTitle}>出生日期</Text>
-        <View className={toolStyles.row}>
-          <Picker
-            mode='selector'
-            range={years.map(String)}
-            value={birthYearIdx}
-            onChange={e => setBirthYearIdx(Number(e.detail.value))}
-          >
-            <View className={toolStyles.select}>{birthYear}年</View>
-          </Picker>
-          <Picker
-            mode='selector'
-            range={months.map(String)}
-            value={birthMonthIdx}
-            onChange={e => setBirthMonthIdx(Number(e.detail.value))}
-          >
-            <View className={toolStyles.select}>{birthMonth}月</View>
-          </Picker>
-          <Picker
-            mode='selector'
-            range={days.map(String)}
-            value={birthDayIdx}
-            onChange={e => setBirthDayIdx(Number(e.detail.value))}
-          >
-            <View className={toolStyles.select}>{birthDay}日</View>
-          </Picker>
-        </View>
-      </View>
+      {/* 出生日期：弹出式日历选择 */}
+      <CalendarPicker
+        title='出生日期'
+        value={birth}
+        onChange={setBirth}
+      />
 
-      {/* 退休年龄选择 */}
-      <View className={toolStyles.section}>
-        <Text className={toolStyles.sectionTitle}>退休年龄</Text>
-        <View className={toolStyles.row}>
+      {/* 行：退休年龄 + 工作年龄 */}
+      <View className={toolStyles.row}>
+        <View className={toolStyles.inputGroup} style={{ flex: 1, marginRight: '16rpx' }}>
+          <Text className={toolStyles.label}>退休</Text>
           <Picker
             mode='selector'
             range={ages.map(a => `${a}岁`)}
             value={ageIdx}
             onChange={e => setAgeIdx(Number(e.detail.value))}
           >
-            <View className={toolStyles.select}>{retireAge}岁</View>
+            <View className={toolStyles.input}>{retireAge}岁</View>
+          </Picker>
+        </View>
+        <View className={toolStyles.inputGroup} style={{ flex: 1 }}>
+          <Text className={toolStyles.label}>工作</Text>
+          <Picker
+            mode='selector'
+            range={workAges.map(a => `${a}岁`)}
+            value={workAgeIdx}
+            onChange={e => setWorkAgeIdx(Number(e.detail.value))}
+          >
+            <View className={toolStyles.input}>{workAge}岁</View>
           </Picker>
         </View>
       </View>
@@ -147,15 +109,13 @@ const RetirementPage: React.FC = () => {
       {/* 计算结果 */}
       {result && (
         <View className={toolStyles.section}>
-          {result.isAlreadyRetired ? (
+          {result.isRetired ? (
             <>
               <Text className={toolStyles.sectionTitle}>🎉 已退休</Text>
               <View className={toolStyles.statGrid}>
                 <View className={toolStyles.statItem}>
-                  <Text className={toolStyles.statLabel}>退休日期</Text>
-                  <Text className={toolStyles.statValue} style={{ fontSize: '24rpx', color: '#6b7280' }}>
-                    {formatDate(result.retirementDate)}
-                  </Text>
+                  <Text className={toolStyles.statLabel}>退休年份</Text>
+                  <Text className={toolStyles.statValue} style={{ fontSize: '28rpx' }}>{result.retireDate.getFullYear()}</Text>
                 </View>
                 <View className={toolStyles.statItem}>
                   <Text className={toolStyles.statLabel}>已退休</Text>
@@ -166,39 +126,57 @@ const RetirementPage: React.FC = () => {
           ) : (
             <>
               <Text className={toolStyles.sectionTitle}>⏳ 退休倒计时</Text>
-              <View style={{ textAlign: 'center', padding: '24rpx 0' }}>
-                <Text style={{ fontSize: '72rpx', fontWeight: 700, color: '#3b82f6' }}>
+              <View className={toolStyles.calcDisplay} style={{ justifyContent: 'center', flexDirection: 'column', gap: '4rpx' }}>
+                <Text className={toolStyles.calcDisplayText} style={{ fontSize: '72rpx', color: '#3b82f6', textAlign: 'center' }}>
                   {result.totalDays}
                 </Text>
-                <Text style={{ fontSize: '28rpx', color: '#6b7280', display: 'block' }}>天</Text>
+                <Text style={{ fontSize: '24rpx', color: '#64748b', textAlign: 'center', display: 'block' }}>天</Text>
               </View>
               <View className={toolStyles.statGrid}>
                 <View className={toolStyles.statItem}>
                   <Text className={toolStyles.statLabel}>约</Text>
-                  <Text className={toolStyles.statValue}>{result.yearsLeft} 年</Text>
+                  <Text className={toolStyles.statValue}>{result.yearsLeft}</Text>
+                  <Text className={toolStyles.statLabel}>年</Text>
                 </View>
                 <View className={toolStyles.statItem}>
                   <Text className={toolStyles.statLabel}>余</Text>
-                  <Text className={toolStyles.statValue}>{result.monthsLeft} 月</Text>
+                  <Text className={toolStyles.statValue}>{result.monthsLeft}</Text>
+                  <Text className={toolStyles.statLabel}>月</Text>
                 </View>
                 <View className={toolStyles.statItem}>
                   <Text className={toolStyles.statLabel}>零</Text>
-                  <Text className={toolStyles.statValue}>{result.daysLeft} 天</Text>
+                  <Text className={toolStyles.statValue}>{result.daysLeft}</Text>
+                  <Text className={toolStyles.statLabel}>天</Text>
                 </View>
                 <View className={toolStyles.statItem}>
                   <Text className={toolStyles.statLabel}>退休年份</Text>
-                  <Text className={toolStyles.statValue}>{result.retirementDate.getFullYear()}</Text>
+                  <Text className={toolStyles.statValue} style={{ fontSize: '28rpx' }}>{result.retireDate.getFullYear()}</Text>
                 </View>
               </View>
-              <View style={{ background: '#f0fdf4', borderRadius: '12rpx', padding: '16rpx', marginTop: '8rpx' }}>
-                <Text style={{ fontSize: '22rpx', color: '#16a34a', textAlign: 'center', display: 'block' }}>
-                  离退休还有 {result.totalDays} 天（约 {result.yearsLeft} 年）
-                </Text>
-                {result.workDays > 0 && (
-                  <Text style={{ fontSize: '22rpx', color: '#6b7280', textAlign: 'center', display: 'block', marginTop: '8rpx' }}>
-                    从 22 岁到退休，共计工作约 {result.workDays} 天
+
+              {/* 工作时间统计 */}
+              <View className={toolStyles.section}>
+                <Text className={toolStyles.sectionTitle}>💼 工作时间统计</Text>
+                <View className={toolStyles.statGrid}>
+                  <View className={toolStyles.statItem}>
+                    <Text className={toolStyles.statLabel}>已工作</Text>
+                    <Text className={toolStyles.statValue}>{result.workedDays}</Text>
+                    <Text className={toolStyles.statLabel}>天</Text>
+                  </View>
+                  <View className={toolStyles.statItem}>
+                    <Text className={toolStyles.statLabel}>剩余</Text>
+                    <Text className={toolStyles.statValue}>{result.remainingWorkDays}</Text>
+                    <Text className={toolStyles.statLabel}>天</Text>
+                  </View>
+                </View>
+                <View className={toolStyles.resultBox} style={{ marginTop: '8rpx', background: '#f8fafc' }}>
+                  <Text style={{ fontSize: '22rpx', color: '#64748b', textAlign: 'center', display: 'block', marginBottom: '12rpx' }}>
+                    已完成 {Math.round(result.workProgress * 100)}% 的工作生涯
                   </Text>
-                )}
+                  <View style={{ height: '12rpx', background: '#e2e8f0', borderRadius: '6rpx', overflow: 'hidden' }}>
+                    <View style={{ width: `${Math.min(100, result.workProgress * 100)}%`, height: '100%', background: 'linear-gradient(90deg, #3b82f6, #8b5cf6)', borderRadius: '6rpx' }} />
+                  </View>
+                </View>
               </View>
             </>
           )}
