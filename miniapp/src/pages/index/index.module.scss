@@ -80,6 +80,18 @@
   padding: $spacing-sm $page-padding $spacing-xl;
 }
 
+.loadingWrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
+}
+
+.loadingText {
+  font-size: $font-size-lg;
+  color: $color-text-secondary;
+}
+
 .empty {
   padding: 120rpx 0;
   display: flex;

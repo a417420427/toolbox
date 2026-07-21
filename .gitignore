@@ -6,6 +6,7 @@ build/
 *.log
 .DS_Store
 .pai
+.swc
 # Flutter
 apps/mobile/build/
 apps/mobile/.dart_tool/

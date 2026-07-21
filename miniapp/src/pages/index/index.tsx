@@ -1,21 +1,27 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import { View, Text, ScrollView, Input } from '@tarojs/components';
 import Taro, { useShareAppMessage, useShareTimeline } from '@tarojs/taro';
 
 import classnames from 'classnames';
 import styles from './index.module.scss';
-import { categories, toolsByCategory } from '@/data/tools';
+import { initTools, getCategories, toolsByCategory, getTotalToolCount } from '@/data/tools';
 import type { ToolCategory } from '@/types/tool';
 import Icon from '@/components/Icon';
 import { useFavoritesStore } from '@/stores';
 
 const IndexPage: React.FC = () => {
+  const [ready, setReady] = useState(false);
   const [collapsed, setCollapsed] = useState<Set<ToolCategory>>(new Set());
   const [keyword, setKeyword] = useState('');
 
+  useEffect(() => {
+    initTools().finally(() => setReady(true));
+  }, []);
+
   const filteredCategories = useMemo(() => {
+    if (!ready) return [];
     const kw = keyword.trim().toLowerCase();
-    return categories
+    return getCategories()
       .map((cat) => ({
         ...cat,
         tools: kw
@@ -28,7 +34,7 @@ const IndexPage: React.FC = () => {
           : toolsByCategory(cat.key),
       }))
       .filter((c) => c.tools.length > 0);
-  }, [keyword]);
+  }, [keyword, ready]);
 
   const toggleCollapse = (cat: ToolCategory) => {
     setCollapsed((prev) => {
@@ -80,9 +86,19 @@ const IndexPage: React.FC = () => {
   );
 
   const totalCount = useMemo(
-    () => categories.reduce((sum, c) => sum + toolsByCategory(c.key).length, 0),
-    []
+    () => getTotalToolCount(),
+    [ready]
   );
+
+  if (!ready) {
+    return (
+      <View className={styles.page}>
+        <View className={styles.loadingWrap}>
+          <Text className={styles.loadingText}>加载中...</Text>
+        </View>
+      </View>
+    );
+  }
 
   return (
     <ScrollView scrollY className={styles.page} enhanced showScrollbar={false}>
