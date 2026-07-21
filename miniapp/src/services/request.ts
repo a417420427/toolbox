@@ -2,17 +2,16 @@
  * 网络请求封装
  * 请求后端 API，支持 token 自动注入
  *
- * 环境变量配置（编译时注入）：
- *   API_BASE_URL — 后端地址，默认 http://localhost:3000
- *
- * 在项目根目录创建 .env 文件：
- *   API_BASE_URL=https://your-api.example.com
- *
- * 或者直接改下面的默认值。
+ * API 地址在 config/index.ts 中通过 defineConstants 注入。
+ * 在项目根目录 .env 文件中设置：
+ *   API_BASE_URL=http://localhost:3000
+ * 编译时会被替换为实际值，不设则走默认地址。
  */
-import Taro from '@tarojs/taro';
 
-const BASE_URL = process.env.API_BASE_URL || 'http://localhost:3000';
+// @ts-ignore — 编译时由 Taro defineConstants 注入
+const BASE_URL: string = (typeof API_BASE_URL !== 'undefined' ? API_BASE_URL : null) || 'http://localhost:3000';
+
+import Taro from '@tarojs/taro';
 
 function getToken(): string {
   try {
