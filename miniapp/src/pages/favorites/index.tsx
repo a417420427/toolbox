@@ -6,16 +6,18 @@ import { useFavoritesStore } from '@/stores';
 import { toolById } from '@/data/tools';
 
 const FavoritesPage: React.FC = () => {
-  const apiFavorites = useFavoritesStore((s) => s.favorites);
+  const favorites = useFavoritesStore((s) => s.favorites);
   const loadFavorites = useFavoritesStore((s) => s.loadFavorites);
+  const toggleFavorite = useFavoritesStore((s) => s.toggleFavorite);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     setLoading(true);
-    loadFavorites().finally(() => setLoading(false));
-  }, []);
+    loadFavorites();
+    setLoading(false);
+  }, [loadFavorites]);
 
-  const displayItems = apiFavorites.map((f) => {
+  const displayItems = favorites.map((f) => {
     const meta = toolById(f.toolId);
     return {
       toolId: f.toolId,
@@ -28,8 +30,8 @@ const FavoritesPage: React.FC = () => {
     Taro.navigateTo({ url: `/pages/tool/index?toolId=${toolId}` });
   };
 
-  const handleRemoveFavorite = async (toolId: string) => {
-    await useFavoritesStore.getState().toggleFavorite(toolId, '', '', '');
+  const handleRemoveFavorite = (toolId: string) => {
+    toggleFavorite(toolId);
     Taro.showToast({ title: '已取消收藏', icon: 'none' });
   };
 

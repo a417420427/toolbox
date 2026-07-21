@@ -7,7 +7,7 @@ import styles from './index.module.scss';
 import { categories, toolsByCategory } from '@/data/tools';
 import type { ToolCategory } from '@/types/tool';
 import Icon from '@/components/Icon';
-import { useAuthStore, useFavoritesStore } from '@/stores';
+import { useFavoritesStore } from '@/stores';
 
 const IndexPage: React.FC = () => {
   const [collapsed, setCollapsed] = useState<Set<ToolCategory>>(new Set());
@@ -44,7 +44,6 @@ const IndexPage: React.FC = () => {
 
   const favoriteIds = useFavoritesStore((s) => s.favoriteIds);
   const toggleFavorite = useFavoritesStore((s) => s.toggleFavorite);
-  const ready = useAuthStore((s) => s.ready);
 
   const isFavorited = useCallback((toolId: string) => {
     return favoriteIds.has(toolId);
@@ -54,17 +53,13 @@ const IndexPage: React.FC = () => {
     Taro.navigateTo({ url: `/pages/tool/index?toolId=${toolId}` });
   };
 
-  const handleFavoriteTap = async (e: any, toolId: string, name: string, description: string, icon: string) => {
+  const handleFavoriteTap = async (e: any, toolId: string) => {
     e.stopPropagation();
-    if (!ready) {
-      Taro.showToast({ title: '登录中，请稍候', icon: 'none' });
-      return;
-    }
-    const wasFavorited = favoriteIds.has(toolId);
-    await toggleFavorite(toolId, name, description, icon);
+    const was = favoriteIds.has(toolId);
+    toggleFavorite(toolId);
     Taro.showToast({
-      title: wasFavorited ? '已取消收藏' : '已收藏',
-      icon: wasFavorited ? 'none' : 'success',
+      title: was ? '已取消收藏' : '已收藏',
+      icon: was ? 'none' : 'success',
     });
   };
 
@@ -160,7 +155,7 @@ const IndexPage: React.FC = () => {
                       </View>
                       <Text
                         className={styles.cardFavorite}
-                        onClick={(e) => handleFavoriteTap(e, tool.id, tool.name, tool.description, tool.icon)}
+                        onClick={(e) => handleFavoriteTap(e, tool.id)}
                       >
                         {isFavorited(tool.id) ? '★' : '☆'}
                       </Text>

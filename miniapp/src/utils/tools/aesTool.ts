@@ -6,6 +6,8 @@
  * 模式: CBC / ECB(使用CBC+空IV) / CTR / GCM
  */
 
+import { createEncoder, createDecoder } from '@/utils/textEncoderCompat'
+
 export enum AesMode { cbc = 'cbc', ecb = 'ecb', ctr = 'ctr', gcm = 'gcm' }
 export enum AesKeySize { bits128 = 128, bits192 = 192, bits256 = 256 }
 
@@ -22,7 +24,7 @@ function hasSubtleCrypto(): boolean {
  * 从密码派生 AES 密钥（PBKDF2）
  */
 async function deriveKey(password: string, salt: Uint8Array, keySize: number, algorithm: string): Promise<CryptoKey> {
-  const encoder = new TextEncoder();
+  const encoder = createEncoder();
   const keyMaterial = await crypto.subtle.importKey(
     'raw',
     encoder.encode(password),
@@ -68,14 +70,13 @@ function base64ToArrayBuffer(base64: string): Uint8Array {
   return bytes;
 }
 
-const encoder = new TextEncoder();
-const decoder = new TextDecoder();
+const encoder = createEncoder();
+const decoder = createDecoder();
 
 // ============================================================
 // Fallback when Web Crypto is unavailable
 // ============================================================
 function xorSimpleEncrypt(plaintext: string, password: string): string {
-  const encoder = new TextEncoder();
   const pwdBytes = encoder.encode(password);
   const ptBytes = encoder.encode(plaintext);
   const result: number[] = [];

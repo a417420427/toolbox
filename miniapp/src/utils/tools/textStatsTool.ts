@@ -3,6 +3,8 @@
  * 移植自 flutter_shared/tools/text_stats_tool.dart
  */
 
+import { createEncoder } from '@/utils/textEncoderCompat'
+
 export interface TextStatsData {
   charCount: number;
   charNoSpace: number;
@@ -49,8 +51,7 @@ export const TextStatsTool = {
     const charNoSpace = charCount - spaceCount;
     const wordCount = input.trim() ? input.trim().split(/\s+/).length : 0;
     const lineCount = input ? input.split('\n').length : 0;
-    const encoder = new TextEncoder();
-    const byteCountUtf8 = encoder.encode(input).length;
+    const byteCountUtf8 = createEncoder().encode(input).length;
     const byteCountUtf16 = input.length * 2;
 
     return {

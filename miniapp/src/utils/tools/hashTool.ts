@@ -4,8 +4,10 @@
  * 浏览器环境使用 Web Crypto API
  */
 
+import { createEncoder } from '@/utils/textEncoderCompat'
+
 async function digestString(algorithm: string, input: string): Promise<string> {
-  const encoder = new TextEncoder();
+  const encoder = createEncoder();
   const data = encoder.encode(input);
   
   let algo: string;
@@ -45,7 +47,6 @@ function md5(input: string): string {
   for (let i = 1; i <= 64; i++) T.push(Math.floor(Math.abs(Math.sin(i)) * 0x100000000));
 
   // Convert string to bytes (UTF-8)
-  const encoder = new TextEncoder();
   const bytes = encoder.encode(input);
   const words: number[] = [];
   for (let i = 0; i < bytes.length * 8; i += 8) {

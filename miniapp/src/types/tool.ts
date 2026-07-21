@@ -1,5 +1,5 @@
 // 工具分类
-export type ToolCategory = 'tools' | 'formatters' | 'crypto' | 'dev';
+export type ToolCategory = 'tools' | 'formatters' | 'crypto' | 'dev' | 'fun';
 
 // 单个工具的元信息
 export interface ToolDefinition {

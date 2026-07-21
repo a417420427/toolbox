@@ -1,13 +1,10 @@
 import React from 'react';
-import { View, Text, ScrollView, Button } from '@tarojs/components';
+import { View, Text, ScrollView } from '@tarojs/components';
 import Taro from '@tarojs/taro';
 import styles from './index.module.scss';
-import { useAuthStore, useFavoritesStore } from '@/stores';
-import * as api from '@/services/api';
+import { useFavoritesStore } from '@/stores';
 
 const MinePage: React.FC = () => {
-  const user = useAuthStore((s) => s.user);
-
   const handleClearFavorites = async () => {
     Taro.showModal({
       title: '确认清除',
@@ -15,14 +12,10 @@ const MinePage: React.FC = () => {
       success: async (res) => {
         if (res.confirm) {
           try {
-            const token = api.getToken();
-            if (!token) return;
-            // 逐个删除所有收藏
             const store = useFavoritesStore.getState();
             for (const f of store.favorites) {
-              await api.removeFavorite(f.toolId);
+              store.toggleFavorite(f.toolId);
             }
-            await store.loadFavorites();
             Taro.showToast({ title: '已清除', icon: 'success' });
           } catch {
             Taro.showToast({ title: '清除失败', icon: 'error' });
@@ -74,13 +67,6 @@ const MinePage: React.FC = () => {
             <Text className={styles.menuLabel}>清除收藏数据</Text>
             <Text className={styles.menuArrow}>›</Text>
           </View>
-          {user && (
-            <View className={styles.menuItem}>
-              <Text className={styles.menuIcon}>👤</Text>
-              <Text className={styles.menuLabel}>{user.name}</Text>
-              <Text className={styles.menuArrow} style={{ fontSize: '20rpx', color: '#9ca3af' }}>已登录</Text>
-            </View>
-          )}
           <View className={styles.menuItem} onClick={handleAbout}>
             <Text className={styles.menuIcon}>ℹ️</Text>
             <Text className={styles.menuLabel}>关于</Text>
@@ -90,7 +76,7 @@ const MinePage: React.FC = () => {
       </View>
 
       <View className={styles.footer}>
-        <Text className={styles.footerText}>工具箱 · 自动登录 · 收藏云端同步</Text>
+        <Text className={styles.footerText}>工具箱 · 本地收藏 · 无需登录</Text>
       </View>
     </ScrollView>
   );

@@ -112,7 +112,7 @@ const ToolPage: React.FC = () => {
   const toolId = router.params.toolId as string;
   const tool = useMemo(() => toolById(toolId), [toolId]);
   const ToolComponent = toolPages[toolId];
-
+  console.log(toolId, tool, 'ToolComponent', ToolComponent);
   // 注册分享功能（右上角菜单 → 好友 + 朋友圈）
   useToolShare(toolId);
 
