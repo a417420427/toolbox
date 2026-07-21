@@ -1,4 +1,11 @@
-const BASE_URL = 'http://localhost:3000';
+/**
+ * 网络请求封装
+ * 生产环境：通过 nginx 代理 /tool/api -> 后端
+ * 本地开发：直接 localhost:3000
+ */
+const BASE_URL = window.location.hostname === 'localhost'
+  ? 'http://localhost:3000'
+  : window.location.origin + '/tool/api';
 
 function getToken(): string {
   return localStorage.getItem('toolbox_admin_token') || '';
