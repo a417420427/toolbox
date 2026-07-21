@@ -1,5 +1,6 @@
 import { CategoryMeta, ToolDefinition } from '@/types/tool';
 import { request } from '@/services/request';
+import { getDefaultCategories, getDefaultTools } from './default-tools';
 
 // ── 接口返回的数据结构 ──
 
@@ -78,8 +79,9 @@ export async function initTools(): Promise<void> {
       cachedCategories = cats;
       cachedTools = tools;
     } catch (e) {
-      console.error('[tools] 加载工具配置失败:', e);
-      throw e;
+      console.warn('[tools] 加载工具配置失败，使用默认数据:', e);
+      cachedCategories = getDefaultCategories();
+      cachedTools = getDefaultTools();
     }
   })();
 
