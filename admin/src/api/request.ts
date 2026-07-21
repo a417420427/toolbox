@@ -5,7 +5,7 @@
  */
 const BASE_URL = window.location.hostname === 'localhost'
   ? 'http://localhost:3000'
-  : window.location.origin + '/tool/api';
+  : window.location.origin + "/tool";
 
 function getToken(): string {
   return localStorage.getItem('toolbox_admin_token') || '';
